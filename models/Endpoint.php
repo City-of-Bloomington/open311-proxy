@@ -8,6 +8,9 @@ class Endpoint
 {
 	private $data;
 
+	private $services; // SimpleXML object from GET Service List response
+	private $serviceDefinitions = array(); // Array of SimpleXMLElements with service_code as the key
+
 	public function __construct($id=null)
 	{
 		if ($id) {
@@ -77,9 +80,6 @@ class Endpoint
 	public function setJurisdiction($string)	{ $this->data['jurisdiction']	= trim($string); }
 	public function setApi_key($string)			{ $this->data['api_key']		= trim($string); }
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
 	/**
 	 * @param array $post
 	 */
@@ -92,5 +92,98 @@ class Endpoint
 				$this->$set($post[$field]);
 			}
 		}
+	}
+
+	//----------------------------------------------------------------
+	// Open311 API Functions
+	//----------------------------------------------------------------
+	/**
+	 * @return array
+	 */
+	public function getServiceGroups()
+	{
+		$groups = array();
+		$services = $this->getServiceList();
+		if ($services) {
+			foreach ($services->service as $service) {
+				$group = "{$service->group}";
+				if (!in_array($group, $groups)) {
+					$groups[] = $group;
+				}
+			}
+		}
+		return $groups;
+	}
+
+	/**
+	 * @return SimpleXMLElement
+	 */
+	public function getServiceList()
+	{
+		if (!$this->services) {
+			$url = "{$this->getUrl()}/services.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
+			$file = file_get_contents($url);
+			if ($file) {
+				$services = simplexml_load_string($file);
+				if ($services) {
+					$this->services = $services;
+				}
+			}
+		}
+		return $this->services;
+	}
+
+	/**
+	 * Returns a single service entry from GET Service List
+	 *
+	 * @param string $service_code
+	 * @return SimpleXMLElement
+	 */
+	public function getService($service_code)
+	{
+		foreach ($this->getServiceList() as $service) {
+			if ("{$service->service_code}" == $service_code) {
+				return $service;
+			}
+		}
+	}
+
+	/**
+	 * Returns the result from GET Service Definition for a single service
+	 *
+	 * @param string $service_code
+	 * @return SimpleXMLElement
+	 */
+	public function getServiceDefinition($service_code)
+	{
+		if (!array_key_exists($service_code, $this->serviceDefinitions)) {
+			$url = "{$this->getUrl()}/services/$service_code.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
+			$file = file_get_contents($url);
+			if ($file) {
+				$definition = simplexml_load_string($file);
+				if ($definition) {
+					$this->serviceDefinitions[$service_code] = $definition;
+				}
+			}
+		}
+		return isset($this->serviceDefinitions[$service_code])
+			? $this->serviceDefinitions[$service_code]
+			: null;
+	}
+
+	public function postServiceRequest()
+	{
+	}
+
+	public function getRequestId()
+	{
+	}
+
+	public function getServiceRequests()
+	{
+	}
+
+	public function getServiceRequest()
+	{
 	}
 }

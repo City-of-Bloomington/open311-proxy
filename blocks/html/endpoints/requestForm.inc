@@ -3,19 +3,15 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param Endpoint $this->endpoint
+ * @param SimpleXMLElement $this->service
  */
-$jurisdiction_id = !empty($_REQUEST['jurisdiction_id'])
-	? View::escape($_REQUEST['jurisdiction_id'])
-	: OPEN311_JURISDICTION;
+$jurisdiction = View::escape($this->endpoint->getJurisdiction());
+$api_key = View::escape($this->endpoint->getApi_key());
 
-$api_key = !empty($_REQUEST['api_key'])
-	? View::escape($_REQUEST['api_key'])
-	: '';
-
-$service = new Category($_GET['service_code']);
-$service_code = "{$service->getId()}";
-$service_name = View::escape($service->getName());
-$service_description = View::escape($service->getDescription());
+$service_code = "{$this->service->service_code}";
+$service_name = View::escape($this->service->service_name);
+$service_description = View::escape($this->service->description);
 
 $url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 if (isset($url->parameters['group']))			{ unset($url->parameters['group']); }
@@ -27,7 +23,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 	</ul>
 </div>
 <div class="clientRequestForm">
-	<h1><?php echo $service_name; ?></h1>
+	<h2><?php echo $service_name; ?></h2>
 	<p class="service_description"><?php echo $service_description; ?></p>
 
 	<?php $url->parameters = array(); ?>
@@ -60,7 +56,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 			<input name="long" id="long" type="hidden" />
 		</fieldset>
 		<fieldset><legend>Report Details</legend>
-			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
+			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction; ?>" />
 			<input name="api_key" type="hidden" value="<?php echo $api_key; ?>" />
 			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
 
@@ -73,46 +69,48 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 		</fieldset>
 
 		<?php
-			$customFields = $service->getCustomFields();
-			if ($customFields) {
+			$service = $this->endpoint->getServiceDefinition($service_code);
+			if ($service && $service->attributes) {
 				echo "
 				<fieldset><legend>Additional Information</legend>
 					<table>
 				";
-				foreach ($customFields as $field) {
-					$name = View::escape($field['name']);
-					$label = isset($field['label']) ? View::escape($field['label']) : $name;
-					$type = isset($field['type']) ? $field['type'] : 'string';
+				foreach ($service->attributes->attribute as $attribute) {
+					$code = View::escape($attribute->code);
+					$description = View::escape($attribute->description);
+					$datatype = "{$attribute->datatype}";
 
 					$inputHTML = '';
-					switch ($type) {
+					switch ($datatype) {
 						case 'singlevaluelist':
-							$inputHTML = "<select name=\"attribute[$name]\" id=\"$name\"><option></option>";
-							foreach ($field['values'] as $value) {
-								$value = View::escape($value);
-								$inputHTML.= "<option>$value</option>";
+							$inputHTML = "<select name=\"$code\" id=\"$code\"><option></option>";
+							foreach ($attribute->values->value as $value) {
+								$k = View::escape($value->key);
+								$n = View::escape($value->name);
+								$inputHTML.= "<option value=\"$k\">$n</option>";
 							}
 							$inputHTML.= "</select>";
 							break;
 
 						case 'multivaluelist':
-							$inputHTML = "<select name=\"attribute[$name][]\" id=\"$name\" multiple=\"multiple\">";
-							foreach ($field['values'] as $value) {
-								$value = View::escape($value);
-								$inputHTML.= "<option>$value</option>";
+							$inputHTML = "<select name=\"{$code}[]\" id=\"$code\" multiple=\"multiple\">";
+							foreach ($attribute->values->value as $value) {
+								$k = View::escape($value->key);
+								$n = View::escape($value->name);
+								$inputHTML.= "<option value=\"$k\">$n</option>";
 							}
 							$inputHTML.= "</select>";
 							break;
 
 						case 'text':
-							$inputHTML = "<textarea name=\"attribute[$name]\" id=\"$name\"></textarea>";
+							$inputHTML = "<textarea name=\"$code\" id=\"$code\"></textarea>";
 							break;
 
 						default:
-							$inputHTML = "<input name=\"attribute[$name]\" id=\"$name\" />";
+							$inputHTML = "<input name=\"$code\" id=\"$code\" />";
 					}
 					echo "
-					<tr><td><label for=\"$name\">$label</label></td>
+					<tr><td><label for=\"$code\">$description</label></td>
 						<td>$inputHTML</td>
 					</tr>
 					";
@@ -129,12 +127,12 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 	</form>
 </div>
 <script type="text/javascript">
-	var DEFAULT_LATITUDE = <?php echo DEFAULT_LATITUDE; ?>,
-		DEFAULT_LONGITUDE = <?php echo DEFAULT_LONGITUDE; ?>,
-		BASE_URL = '<?php echo BASE_URL; ?>';
+	var DEFAULT_LATITUDE = <?php #echo DEFAULT_LATITUDE; ?>,
+		DEFAULT_LONGITUDE = <?php #echo DEFAULT_LONGITUDE; ?>,
+		BASE_URL = '<?php #echo BASE_URL; ?>';
 </script>
 <?php
-	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
-	$this->template->addToAsset('scripts',BASE_URL.'/js/open311/map_picker.js');
+#	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+#	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
+#	$this->template->addToAsset('scripts',BASE_URL.'/js/open311/map_picker.js');
 ?>

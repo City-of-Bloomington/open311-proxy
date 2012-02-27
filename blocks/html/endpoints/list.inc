@@ -22,7 +22,9 @@ echo "
 			? "<a class=\"edit button\" href=\"".BASE_URI."/endpoints/update?endpoint_id={$endpoint->getId()}\">Edit</a>"
 			: '';
 		echo "
-		<div><h3>$name $editButton</h3>
+		<div><h3><a href=\"".BASE_URI."/endpoints/view?endpoint_id={$endpoint->getId()}\">$name</a>
+				$editButton
+			</h3>
 			<table>
 				<tr><th>url</th><td>$url</td></tr>
 				<tr><th>jurisdiction</th><td>$jurisdiction</td></tr>

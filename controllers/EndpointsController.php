@@ -19,7 +19,21 @@ class EndpointsController extends Controller
 	public function view()
 	{
 		$endpoint = $this->loadEndpoint($_GET['endpoint_id']);
-		$this->template->blocks[] = new Block('endpoints/info.inc',array('endpoint'=>$endpoint));
+		$service = !empty($_REQUEST['service_code'])
+			? $endpoint->getService($_REQUEST['service_code'])
+			: null;
+		if ($service) {
+			$this->template->blocks[] = new Block(
+				'endpoints/requestForm.inc',
+				array('endpoint'=>$endpoint, 'service'=>$service)
+			);
+		}
+		elseif (isset($_REQUEST['group'])) {
+			$this->template->blocks[] = new Block('endpoints/chooseService.inc', array('endpoint'=>$endpoint));
+		}
+		else {
+			$this->template->blocks[] = new Block('endpoints/chooseGroup.inc', array('endpoint'=>$endpoint));
+		}
 	}
 
 	public function update()

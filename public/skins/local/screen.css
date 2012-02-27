@@ -29,7 +29,7 @@ button, .button {
 	border:1px solid #777; border-radius:4px;
 	display:inline-block;
 	padding:0 10px 0 30px;
-	font-size:16px; font-weight:bold;
+	font-size:16px; font-weight:bold; color:black;
 }
 .add { background:url('images/plus_button.png') left center no-repeat; }
 .edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
@@ -76,3 +76,12 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 	padding-left:20px;
 	background:url('images/emblem-important.png') left center no-repeat;
 }
+
+.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; line-height:20px; }
+.breadcrumbs li { list-style:none; float:left; height:20px; padding-left:4px; }
+.breadcrumbs a {
+	display:block;
+	background:url('images/breadcrumb.png') no-repeat right center;
+	padding:0 15px 0 0;
+}
+
