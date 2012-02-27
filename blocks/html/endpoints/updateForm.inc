@@ -32,7 +32,7 @@ $title = $this->endpoint->getId() ? View::escape('Edit '.$this->endpoint->getNam
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>
-			<a class="cancel button" href="<?php echo BASE_URI; ?>/endpoints">Cancel</a>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/endpoints">Cancel</a>
 		</fieldset>
 	</form>
 </div>

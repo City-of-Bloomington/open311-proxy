@@ -8,5 +8,6 @@ class IndexController extends Controller
 {
 	public function index()
 	{
+		$this->template->blocks[] = new Block('open311/client.inc');
 	}
 }

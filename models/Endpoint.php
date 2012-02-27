@@ -24,7 +24,7 @@ class Endpoint
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('people/unknownPerson');
+				throw new Exception('endpoints/unknownEndpoint');
 			}
 		}
 		else {
@@ -88,7 +88,7 @@ class Endpoint
 		$fields = array('url','name','jurisdiction','api_key');
 		foreach ($fields as $field) {
 			if (isset($post)) {
-				$set = ucfirst($field);
+				$set = 'set'.ucfirst($field);
 				$this->$set($post[$field]);
 			}
 		}

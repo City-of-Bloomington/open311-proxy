@@ -35,7 +35,7 @@ button, .button {
 .edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
 .search { background:url('images/buttonBackground.png') left center no-repeat; padding-left:10px; }
 .submit, .login { background:url('images/check_button.png') left center no-repeat; }
-.delete, .cancel { background:url('images/x_button.png') left center no-repeat; }
+.delete { background:url('images/x_button.png') left center no-repeat; }
 
 /**
  * Banner

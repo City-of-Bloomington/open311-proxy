@@ -19,7 +19,7 @@ class EndpointsController extends Controller
 	public function view()
 	{
 		$endpoint = $this->loadEndpoint($_GET['endpoint_id']);
-		$this->template->blocks[] = new Block('endpoints/info.inc');
+		$this->template->blocks[] = new Block('endpoints/info.inc',array('endpoint'=>$endpoint));
 	}
 
 	public function update()
@@ -51,7 +51,7 @@ class EndpointsController extends Controller
 	private function loadEndpoint($id)
 	{
 		try {
-			$endpoint = new Endpoint($id);
+			return new Endpoint($id);
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
