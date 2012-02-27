@@ -1,0 +1,145 @@
+<?php
+/**
+ * Displayed in the banner
+ */
+define('APPLICATION_NAME','application_name');
+
+/**
+ * Where on the filesystem this application is installed
+ */
+define('APPLICATION_HOME','/var/www/sites/application_name');
+
+/**
+ * The URL to get to this site
+ * Do NOT use a trailing slash
+ */
+define('BASE_URL','http://localhost/application_name');
+define('BASE_URI','/application_name');
+
+
+/**
+ * Where on the filesystem the framework is installed.
+ */
+define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
+
+/**
+ * This needs to point to the library directory inside your
+ * installation of the ZendFramework
+ * http://framework.zend.com
+ */
+define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+
+
+/**
+ * Used when there's an error on the site.  The Framework will
+ * print out a nice error message, encouraging users to report any problems
+ * See: FRAMEWORK/ITSFunctions.inc
+ *
+ * This is also the default Admin user information that gets added to the database
+ */
+define('ADMINISTRATOR_NAME','Site Admin');
+define('ADMINISTRATOR_EMAIL','admin@servername.com');
+
+/**
+ * Set how we want to handle errors
+ * PHP_DEFAULT - do whatever's configured in php.ini
+ *
+ * If you do not define error handling to PHP_DEFAULT
+ * the custom error handlers kick in.  All of the custom error display
+ * frunctions are in FRAMEWORK/globalFunctions.inc.  The custom error
+ * function decide what to do based on $ERROR_REPORING array values
+ *
+ * PRETTY_PRINT - Display a message in the browser
+ * EMAIL_ADMIN - email the Administrator
+ * EMAIL_USER - email the logged in user
+ * SKIDDER - post errors to a Skidder server (see config below)
+*/
+define('ERROR_REPORTING','PHP_DEFAULT');
+//define('ERROR_REPORTING','CUSTOM');
+//$ERROR_REPORTING = array('PRETTY_PRINT','SKIDDER');
+
+/**
+ * Skidder is a web service for error notifications.  Error reporting supports
+ * posting errors to a Skidder server.  You must register for an application_id
+ * on the skidder server you want to post errors to.
+ */
+//define('SKIDDER_URL','http://localhost/skidder/home.php');
+//define('SKIDDER_APPLICATION_ID',);
+
+/**
+ * Database Setup
+ * Refer to the PDO documentation for DSN sytnax for your database type
+ * http://www.php.net/manual/en/pdo.drivers.php
+ */
+define('DB_ADAPTER','Pdo_Mysql');
+define('DB_HOST','localhost');
+define('DB_NAME',APPLICATION_NAME);
+define('DB_USER',APPLICATION_NAME);
+define('DB_PASS','password');
+
+/**
+ * Directory Configuration
+ *
+ * This is required in order to use the LDAP or ADS authentication
+ * If you do not want to use external authentication, you can comment this out
+ */
+// Example for ADS style authentication
+define('DIRECTORY_SERVER','ldaps://example.org:636');
+define('DIRECTORY_BASE_DN','OU=Department,DC=example,DC=org');
+define('DIRECTORY_USERNAME_ATTRIBUTE', 'CN');
+define('DIRECTORY_USER_BINDING','{username}@example.org');
+define('DIRECTORY_ADMIN_BINDING', 'admin@example.org');
+define('DIRECTORY_ADMIN_PASS','password');
+// Example for LDAP style authentication
+//define('DIRECTORY_SERVER','ldaps://example.org:636');
+//define('DIRECTORY_BASE_DN','ou=people,o=ldap.domain.somewhere');
+//define('DIRECTORY_USERNAME_ATTRIBUTE', 'uid');
+//define('DIRECTORY_USER_BINDING','uid={username},'.DIRECTORY_BASE_DN);
+//define('DIRECTORY_ADMIN_BINDING', 'uid=admin,'.DIRECTORY_BASE_DN);
+//define('DIRECTORY_ADMIN_PASS','password');
+
+/**
+ * CAS authentication http://www.jasig.org/cas
+ *
+ * https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * phpCAS is a PHP library for handling the calls to the CAS service
+ * It is the official library, part of the Jasig CAS project
+ */
+//define('CAS','/var/www/libraries/phpCAS');
+//define('CAS_SERVER','cas.somewhere.org');
+//define('CAS_URI','cas');
+
+//-------------------------------------------------------------------
+// Bootstrap code
+// No editing is usually needed after this point
+//-------------------------------------------------------------------
+/**
+ * Enable autoloading for the PHP libraries
+ */
+ini_set('include_path','.'.PATH_SEPARATOR.ZEND);
+require_once 'Zend/Loader/Autoloader.php';
+Zend_Loader_Autoloader::getInstance();
+
+include FRAMEWORK.'/globalFunctions.php';
+spl_autoload_register('autoload');
+
+/**
+ * Session Startup
+ * Don't start a session for CLI usage.
+ * We only want sessions when PHP code is executed from the webserver
+ */
+if (!defined('STDIN')) {
+	ini_set('session.save_path',APPLICATION_HOME.'/data/sessions');
+	session_start();
+}
+
+/**
+ * Load the Zend_Acl
+ */
+include APPLICATION_HOME.'/access_control.inc';
+
+/**
+ * Grab a timestamp for calculating process time
+ */
+$startTime = microtime(1);
