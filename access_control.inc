@@ -20,11 +20,13 @@ $ZEND_ACL->add(new Zend_Acl_Resource('login'));
 
 $ZEND_ACL->add(new Zend_Acl_Resource('endpoints'));
 $ZEND_ACL->add(new Zend_Acl_Resource('clients'));
+$ZEND_ACL->add(new Zend_Acl_Resource('embed'));
 
 /**
  * Assign permissions to the resources
  */
-$ZEND_ACL->allow(null,'login');
+$ZEND_ACL->allow(null,
+				array('login','embed'));
 
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null,

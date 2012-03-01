@@ -110,6 +110,12 @@ define('DIRECTORY_ADMIN_PASS','password');
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
+/**
+ * YUI
+ * What host do you want to use for the YUI libraries
+ */
+define('YUI','http://yui.yahooapis.com/3.4.1/build');
+
 //-------------------------------------------------------------------
 // Bootstrap code
 // No editing is usually needed after this point

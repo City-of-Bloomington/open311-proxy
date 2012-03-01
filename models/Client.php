@@ -18,7 +18,12 @@ class Client
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from clients where id=?';
+				if (is_numeric($id)) {
+					$sql = 'select * from clients where id=?';
+				}
+				else {
+					$sql = 'select * from clients where name=?';
+				}
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 

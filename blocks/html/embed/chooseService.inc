@@ -10,10 +10,10 @@ $url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 $url->group = $_GET['group'];
 ?>
 <div class="serviceChooser">
-	<h2><a href="<?php echo $url; ?>">
+	<h3><a href="<?php echo $url; ?>">
 			<?php echo View::escape($_GET['group']); ?>
 		</a>
-	</h2>
+	</h3>
 	<ul>
 	<?php
 		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);

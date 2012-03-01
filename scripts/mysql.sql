@@ -23,7 +23,7 @@ create table endpoints (
 create table clients (
 	id int unsigned not null primary key auto_increment,
 	url varchar(255) not null,
-	name varchar(128) not null,
+	name varchar(128) not null unique,
 	endpoint_id int unsigned not null,
 	foreign key (endpoint_id) references endpoints(id)
 );

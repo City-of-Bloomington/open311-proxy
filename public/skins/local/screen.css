@@ -15,10 +15,10 @@ td { padding:.25em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
-ul { list-style-type:bullet; margin-left:1em; padding:0; }
+ul { list-style-type:none; margin:0 0 1em 1em; padding:0; }
 li { margin:0; }
 
-fieldset { padding:.25em 0; }
+fieldset { margin-bottom:1em; }
 legend { font-weight:bold; }
 label { font-weight:bold; }
 
@@ -85,3 +85,9 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 	padding:0 15px 0 0;
 }
 
+/* Collapsing and Expanding styles */
+.serviceChooser h3 {
+	background:#dddddd url('images/minus.png') 95% center  no-repeat; cursor:pointer;
+}
+.collapsed h3 { background:#dddddd url('images/plus.png') 95% center no-repeat; }
+.collapsed ul { display:none; }

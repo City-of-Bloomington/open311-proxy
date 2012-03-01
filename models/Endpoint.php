@@ -11,6 +11,12 @@ class Endpoint
 	private $services; // SimpleXML object from GET Service List response
 	private $serviceDefinitions = array(); // Array of SimpleXMLElements with service_code as the key
 
+	public static $optionalOpen311Fields = array(
+		'address_string','lat','long',
+		'first_name','last_name','phone','email',
+		'description'
+	);
+
 	public function __construct($id=null)
 	{
 		if ($id) {
@@ -122,12 +128,9 @@ class Endpoint
 	{
 		if (!$this->services) {
 			$url = "{$this->getUrl()}/services.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
-			$file = file_get_contents($url);
-			if ($file) {
-				$services = simplexml_load_string($file);
-				if ($services) {
-					$this->services = $services;
-				}
+			$services = $this->queryServer($url);
+			if ($services) {
+				$this->services = $services;
 			}
 		}
 		return $this->services;
@@ -158,12 +161,9 @@ class Endpoint
 	{
 		if (!array_key_exists($service_code, $this->serviceDefinitions)) {
 			$url = "{$this->getUrl()}/services/$service_code.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
-			$file = file_get_contents($url);
-			if ($file) {
-				$definition = simplexml_load_string($file);
-				if ($definition) {
-					$this->serviceDefinitions[$service_code] = $definition;
-				}
+			$definition = $this->queryServer($url);
+			if ($definition) {
+				$this->serviceDefinitions[$service_code] = $definition;
 			}
 		}
 		return isset($this->serviceDefinitions[$service_code])
@@ -171,8 +171,45 @@ class Endpoint
 			: null;
 	}
 
-	public function postServiceRequest()
+	/**
+	 * @param array $post
+	 * @return SimpleXMLElement
+	 */
+	public function postServiceRequest(array $post)
 	{
+		$request = array(
+			'jurisdiction_id'=>$this->getJurisdiction(),
+			'api_key'=>$this->getApi_key(),
+			'service_code'=>$_POST['service_code']
+		);
+		foreach (self::$optionalOpen311Fields as $field) {
+			if (!empty($_POST[$field])) {
+				$request[$field] = $_POST[$field];
+			}
+		}
+		$service = $this->getServiceDefinition($post['service_code']);
+		if ($service && $service->attributes) {
+			foreach ($service->attributes->attribute as $attribute) {
+				$code = "{$attribute->code}";
+				if (isset($_POST[$code])) {
+					$request[$code] = $_POST[$code];
+				}
+			}
+		}
+		$open311 = curl_init("{$this->getUrl()}/requests.xml");
+		curl_setopt_array($open311, array(
+			CURLOPT_POST=>true,
+			CURLOPT_HEADER=>false,
+			CURLOPT_RETURNTRANSFER=>true,
+			CURLOPT_POSTFIELDS=>$request,
+			CURLOPT_SSL_VERIFYPEER=>false
+		));
+		$response = curl_exec($open311);
+		if (!$response) {
+			throw new Exception(curl_error($open311));
+		}
+
+		return simplexml_load_string($response);
 	}
 
 	public function getRequestId()
@@ -183,7 +220,33 @@ class Endpoint
 	{
 	}
 
-	public function getServiceRequest()
+	/**
+	 * @param SimpleXMLElement|string
+	 */
+	public function getServiceRequest($service_request_id)
 	{
+		$service_request_id = (string)$service_request_id;
+		return $this->queryServer("{$this->getUrl()}/requests/$service_request_id.xml");
+	}
+
+	/**
+	 * @param string $url
+	 * @return SimpleXMLElement
+	 */
+	private function queryServer($url)
+	{
+		$file = file_get_contents($url);
+		if ($file) {
+			$xml = simplexml_load_string($file);
+			if ($xml) {
+				return $xml;
+			}
+			else {
+				throw new Exception('endpoints/invalidXML');
+			}
+		}
+		else {
+			throw new Exception('endpoints/open311ServerUnReachable');
+		}
 	}
 }
