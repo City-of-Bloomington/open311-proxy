@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Client $this->client
  */
-$fields = array('url','name','endpoint_id');
+$fields = array('url','name','endpoint_id','api_key');
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = View::escape($this->client->$get());
@@ -14,17 +14,20 @@ $title = $this->client->getId() ? View::escape('Edit '.$this->client->getName())
 ?>
 <div class="updateClientForm">
 	<h2><?php echo $title; ?></h2>
+	<p>Clients can specify their own api_key for the endpoint.  The api_key will need to
+		have been registered with the Open311 server at the endpoint.
+	</p>
 	<form method="post" action="<?php echo BASE_URI; ?>/clients/update">
 		<fieldset>
 			<input name="client_id" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name" class="required">Name</label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
-				<tr><td><label for="url">URL</label></td>
+				<tr><td><label for="url" class="required">URL</label></td>
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
-				<tr><td><label for="endpoint_id">Endpoint</label></td>
+				<tr><td><label for="endpoint_id" class="required">Endpoint</label></td>
 					<td><select name="endpoint_id" id="endpoint_id">
 						<?php
 							$list = new EndpointList();
@@ -39,6 +42,9 @@ $title = $this->client->getId() ? View::escape('Edit '.$this->client->getName())
 						?>
 						</select>
 					</td>
+				</tr>
+				<tr><td><label for="api_key">API Key</label></td>
+					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>

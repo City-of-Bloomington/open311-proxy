@@ -44,7 +44,8 @@ class Endpoint
 
 	public function validate()
 	{
-		if (!$this->getUrl() || !$this->getName()) {
+		if (!$this->getUrl() || !$this->getName()
+			|| !$this->getJurisdiction() || !$this->getApi_key()) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -95,7 +96,7 @@ class Endpoint
 	 */
 	public function set($post)
 	{
-		$fields = array('url','name','jurisdiction','api_key');
+		$fields = array('url','name','jurisdiction','api_key','latitude','longitude');
 		foreach ($fields as $field) {
 			if (isset($post)) {
 				$set = 'set'.ucfirst($field);
@@ -177,13 +178,15 @@ class Endpoint
 
 	/**
 	 * @param array $post
+	 * @param Client $client
 	 * @return SimpleXMLElement
 	 */
-	public function postServiceRequest(array $post)
+	public function postServiceRequest(array $post, Client $client=null)
 	{
+		$api_key = $client->getApi_key() ? $client->getApi_key() : $this->getApi_key();
 		$request = array(
 			'jurisdiction_id'=>$this->getJurisdiction(),
-			'api_key'=>$this->getApi_key(),
+			'api_key'=>$api_key,
 			'service_code'=>$_POST['service_code']
 		);
 		foreach (self::$optionalOpen311Fields as $field) {

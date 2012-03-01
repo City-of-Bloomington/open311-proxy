@@ -21,6 +21,7 @@ li { margin:0; }
 fieldset { margin-bottom:1em; }
 legend { font-weight:bold; }
 label { font-weight:bold; }
+label.required { padding-right:20px; background:url('images/asterisk.png') right center no-repeat; }
 
 /**
  * Base styles for buttons and button links

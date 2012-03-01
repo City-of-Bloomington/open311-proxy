@@ -5,10 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Endpoint $this->endpoint
  */
-$url = View::escape($this->endpoint->getUrl());
-$name = View::escape($this->endpoint->getName());
-$jurisdiction = View::escape($this->endpoint->getJurisdiction());
-$api_key = View::escape($this->endpoint->getApi_key());
+$fields = array('url','name','jurisdiction','api_key','latitude','longitude');
+foreach ($fields as $field) {
+	$get = 'get'.ucfirst($field);
+	$$field = View::escape($this->endpoint->$get());
+}
 echo "
 <div class=\"endpointInfo\">
 	<h2>$name</h2>
@@ -16,6 +17,8 @@ echo "
 		<tr><th>url</th><td>$url</td></tr>
 		<tr><th>jurisdiction</th><td>$jurisdiction</td></tr>
 		<tr><th>api_key</th><td>$api_key</td></tr>
+		<tr><th>latitude</th><td>$latitude</td></tr>
+		<tr><th>longitude</th><td>$longitude</td></tr>
 	</table>
 </div>
 ";

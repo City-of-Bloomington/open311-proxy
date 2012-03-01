@@ -27,5 +27,6 @@ create table clients (
 	url varchar(255) not null,
 	name varchar(128) not null unique,
 	endpoint_id int unsigned not null,
+	api_key varchar(128),
 	foreign key (endpoint_id) references endpoints(id)
 );

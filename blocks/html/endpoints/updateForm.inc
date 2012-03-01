@@ -17,19 +17,33 @@ $title = $this->endpoint->getId() ? View::escape('Edit '.$this->endpoint->getNam
 	<form method="post" action="<?php echo BASE_URI; ?>/endpoints/update">
 		<fieldset>
 			<input name="endpoint_id" type="hidden" value="<?php echo $this->endpoint->getId(); ?>" />
+			<p>Configure an endpoint you have established a relationship with.
+				You must have signed up for at least one api_key from the Open311 server
+				at the endpoint.  This will be the default api_key for posting to the endpoint.
+			</p>
+			<p>
+				Additional clients for this endpoint can also have their own api_keys.
+			</p>
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name" class="required">Name</label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
-				<tr><td><label for="url">URL</label></td>
+				<tr><td><label for="url" class="required">URL</label></td>
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
-				<tr><td><label for="jurisdiction">Jurisdiction</label></td>
+				<tr><td><label for="jurisdiction" class="required">Jurisdiction</label></td>
 					<td><input name="jurisdiction" id="jurisdiction" value="<?php echo $jurisdiction; ?>" /></td>
 				</tr>
-				<tr><td><label for="api_key">API Key</label></td>
+				<tr><td><label for="api_key" class="required">API Key</label></td>
 					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
 				</tr>
+			</table>
+		</fieldsset>
+		<fieldset>
+			<p>You can specify lat/long for the endpoint.  Lat/long will be used
+				to center the map on the client request form.
+			</p>
+			<table>
 				<tr><td><label for="latitude">Latitude</label></td>
 					<td><input name="latitude" id="latitude" value="<?php echo $latitude; ?>" /></td>
 				</tr>

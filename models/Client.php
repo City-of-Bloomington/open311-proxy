@@ -42,7 +42,7 @@ class Client
 
 	public function validate()
 	{
-		if (!$this->getUrl() || !$this->getName()) {
+		if (!$this->getUrl() || !$this->getName() || !$this->getEndpoint_id()) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -81,16 +81,32 @@ class Client
 	public function getUrl()			{ return $this->getField('url'); }
 	public function getName()			{ return $this->getField('name'); }
 	public function getEndpoint_id()	{ return $this->getField('endpoint_id'); }
+	public function getApi_key()		{ return $this->getField('api_key'); }
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-	public function setUrl($string)		{ $this->data['url']	= trim($string); }
-	public function setName($string)	{ $this->data['name']	= trim($string); }
+	public function setUrl($string)		{ $this->data['url']		= trim($string); }
+	public function setName($string)	{ $this->data['name']		= trim($string); }
+	public function setApi_key($string)	{ $this->data['api_key']	= trim($string); }
 
+	/**
+	 * @param array $post
+	 */
+	public function set($post)
+	{
+		$fields = array('name','url','endpoint_id','api_key');
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post[$field]);
+			}
+		}
+	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
+
 	/**
 	 * @return Endpoint
 	 */
@@ -122,17 +138,4 @@ class Client
 		$this->endpoint = $endpoint;
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function set($post)
-	{
-		$fields = array('name','url','endpoint_id');
-		foreach ($fields as $field) {
-			if (isset($post[$field])) {
-				$set = 'set'.ucfirst($field);
-				$this->$set($post[$field]);
-			}
-		}
-	}
 }

@@ -20,7 +20,7 @@ class EmbedController extends Controller
 			// Handle what the user posts
 			if ($service && isset($_POST['service_code'])) {
 				try {
-					$xml = $endpoint->postServiceRequest($_POST);
+					$xml = $endpoint->postServiceRequest($_POST, $client);
 					$block = new Block('embed/thankYou.inc',array('endpoint'=>$endpoint));
 					if ($xml->request->service_request_id) {
 						try {

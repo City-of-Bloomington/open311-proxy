@@ -15,6 +15,7 @@ echo "
 	foreach ($this->clientList as $client) {
 		$url = View::escape($client->getUrl());
 		$name = View::escape($client->getName());
+		$api_key = View::escape($client->getApi_key());
 
 		$endpoint = $client->getEndpoint();
 		$endpointName = View::escape($endpoint->getName());
@@ -34,6 +35,9 @@ echo "
 							$endpointName
 						</a>
 					</td>
+				</tr>
+				<tr><th>api_key</th>
+					<td>$api_key</td>
 				</tr>
 			</table>
 		</div>
