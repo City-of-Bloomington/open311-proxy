@@ -116,6 +116,14 @@ define('DIRECTORY_ADMIN_PASS','password');
  */
 define('YUI','http://yui.yahooapis.com/3.4.1/build');
 
+/**
+ * Default coordinates for map center
+ * This should probably be the center of your city
+ * If you can, it's best to adjust these values in your php.ini
+ */
+define('DEFAULT_LATITUDE',ini_get('date.default_latitude'));
+define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
+
 //-------------------------------------------------------------------
 // Bootstrap code
 // No editing is usually needed after this point

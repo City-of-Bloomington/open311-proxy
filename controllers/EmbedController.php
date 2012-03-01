@@ -8,6 +8,8 @@ class EmbedController extends Controller
 {
 	public function index()
 	{
+		$this->template->setFilename('embed');
+
 		$client = !empty($_REQUEST['client']) ? $this->loadClient($_REQUEST['client']) : null;
 		if ($client) {
 			$endpoint = $client->getEndpoint();
@@ -37,11 +39,10 @@ class EmbedController extends Controller
 			}
 
 			// Display the Forms
-			$this->template->setFilename('embed');
 			if ($service) {
 				$this->template->blocks[] = new Block(
 					'embed/requestForm.inc',
-					array('endpoint'=>$endpoint, 'service'=>$service)
+					array('client'=>$client, 'service'=>$service)
 				);
 			}
 			elseif (isset($_REQUEST['group'])) {

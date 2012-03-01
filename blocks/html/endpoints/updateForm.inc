@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Endpoint $this->endpoint
  */
-$fields = array('url','name','jurisdiction','api_key');
+$fields = array('url','name','jurisdiction','api_key','latitude','longitude');
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = View::escape($this->endpoint->$get());
@@ -29,6 +29,12 @@ $title = $this->endpoint->getId() ? View::escape('Edit '.$this->endpoint->getNam
 				</tr>
 				<tr><td><label for="api_key">API Key</label></td>
 					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
+				</tr>
+				<tr><td><label for="latitude">Latitude</label></td>
+					<td><input name="latitude" id="latitude" value="<?php echo $latitude; ?>" /></td>
+				</tr>
+				<tr><td><label for="longitude">Longitude</label></td>
+					<td><input name="longitude" id="longitude" value="<?php echo $longitude; ?>" /></td>
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>

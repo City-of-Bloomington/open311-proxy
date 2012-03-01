@@ -6,7 +6,7 @@ body { font-family:sans-serif; }
 h2 { font-size:131%; font-weight:bold; margin:.5em 0; color:#036; }
 h3 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
 h4 { font-size:100%; font-weight:bold; }
-a { text-decoration:none; color:#00f; }
+a { text-decoration:none; color:#00f; cursor:pointer; }
 p { margin:0 .5em .5em .5em; }
 
 table { margin:0 .5em .5em .5em; }
@@ -30,12 +30,14 @@ button, .button {
 	display:inline-block;
 	padding:0 10px 0 30px;
 	font-size:16px; font-weight:bold; color:black;
+	cursor:pointer;
 }
 .add { background:url('images/plus_button.png') left center no-repeat; }
 .edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
 .search { background:url('images/buttonBackground.png') left center no-repeat; padding-left:10px; }
 .submit, .login { background:url('images/check_button.png') left center no-repeat; }
 .delete { background:url('images/x_button.png') left center no-repeat; }
+.chooseLocation { background:url('images/reticule_button.png') left center no-repeat; }
 
 /**
  * Banner
@@ -91,3 +93,14 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 }
 .collapsed h3 { background:#dddddd url('images/plus.png') 95% center no-repeat; }
 .collapsed ul { display:none; }
+
+
+#location_map {
+	width:100%; height:300px;
+	border:2px solid black;
+}
+
+/* YUI styles */
+.yui3-overlay { width:90%; }
+.yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
+.yui3-widget-ft { clear:both; }

@@ -17,7 +17,9 @@ create table endpoints (
 	url varchar(255) not null,
 	name varchar(128) not null,
 	jurisdiction varchar(128),
-	api_key varchar(128)
+	api_key varchar(128),
+	latitude float,
+	longitude float
 );
 
 create table clients (

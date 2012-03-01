@@ -3,9 +3,10 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Endpoint $this->endpoint
+ * @param Client $this->client
  * @param SimpleXMLElement $this->service
  */
+$endpoint = $this->client->getEndpoint();
 $service_code = "{$this->service->service_code}";
 $service_name = View::escape($this->service->service_name);
 $service_description = View::escape($this->service->description);
@@ -15,7 +16,7 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 }
 ?>
 <div class="breadcrumbs">
-	<ul><li><a href="<?php echo BASE_URI."/endpoints/view?endpoint_id={$this->endpoint->getId()}"; ?>">
+	<ul><li><a href="<?php echo BASE_URI."/embed/view?client={$this->client->getId()}"; ?>">
 				All Reports
 			</a>
 		</li>
@@ -26,11 +27,11 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 	<h2><?php echo $service_name; ?></h2>
 	<p class="service_description"><?php echo $service_description; ?></p>
 
-	<form method="post" action="<?php echo BASE_URI; ?>/endpoints/view">
+	<form method="post" action="<?php echo BASE_URI; ?>/embed">
 		<fieldset><legend>Location</legend>
 			<div>
 				<span id="location"><?php echo $address_string; ?></span>
-				<a id="openMapButton" class="chooseLocation button">Choose Location</a>
+				<button id="openMapButton" class="chooseLocation">Choose Location</button>
 			</div>
 			<div id="map_overlay"></div>
 			<input name="address_string" id="address_string" type="hidden" value="<?php echo $address_string; ?>" />
@@ -60,7 +61,7 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 					<div><textarea name="description" id="description"><?php echo $description; ?></textarea></div>
 				</li>
 			<?php
-				$service = $this->endpoint->getServiceDefinition($service_code);
+				$service = $endpoint->getServiceDefinition($service_code);
 				if ($service && $service->attributes) {
 					foreach ($service->attributes->attribute as $attribute) {
 						$code = View::escape($attribute->code);
@@ -139,7 +140,7 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 		</fieldset>
 
 		<fieldset>
-			<input name="endpoint_id" type="hidden" value="<?php echo $this->endpoint->getId(); ?>" />
+			<input name="client" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
 
 			<button type="submit" class="submit">Submit</button>
@@ -147,12 +148,18 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 	</form>
 </div>
 <script type="text/javascript">
-	var DEFAULT_LATITUDE = <?php #echo DEFAULT_LATITUDE; ?>,
-		DEFAULT_LONGITUDE = <?php #echo DEFAULT_LONGITUDE; ?>,
-		BASE_URL = '<?php #echo BASE_URL; ?>';
+<?php
+	$lat = $endpoint->getLatitude() ? $endpoint->getLatitude() : DEFAULT_LATITUDE;
+	$long = $endpoint->getLongitude() ? $endpoint->getLongitude() : DEFAULT_LONGITUDE;
+	echo "
+	var DEFAULT_LATITUDE = $lat,
+		DEFAULT_LONGITUDE = $long,
+		BASE_URL = '".BASE_URL."';
+	";
+?>
 </script>
 <?php
-#	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-#	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
-#	$this->template->addToAsset('scripts',BASE_URL.'/js/open311/map_picker.js');
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/map_picker.js');
 ?>

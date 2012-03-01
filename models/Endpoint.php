@@ -77,6 +77,8 @@ class Endpoint
 	public function getName()			{ return $this->getField('name'); }
 	public function getJurisdiction()	{ return $this->getField('jurisdiction'); }
 	public function getApi_key()		{ return $this->getField('api_key'); }
+	public function getLatitude()		{ return $this->getField('latitude'); }
+	public function getLongitude()		{ return $this->getField('longitude'); }
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -85,6 +87,8 @@ class Endpoint
 	public function setName($string)			{ $this->data['name']			= trim($string); }
 	public function setJurisdiction($string)	{ $this->data['jurisdiction']	= trim($string); }
 	public function setApi_key($string)			{ $this->data['api_key']		= trim($string); }
+	public function setLatitude($float)			{ $this->data['latitude']		= (float)$float; }
+	public function setLongitude($float)		{ $this->data['longitude']		= (float)$float; }
 
 	/**
 	 * @param array $post
