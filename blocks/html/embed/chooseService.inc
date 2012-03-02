@@ -16,9 +16,12 @@ $url->group = $_GET['group'];
 	</h3>
 	<ul>
 	<?php
-		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		$services = $this->endpoint->getServiceList();
+		$services = !empty($_GET['group'])
+			? $this->endpoint->getGroupServices($_GET['group'])
+			: $this->endpoint->getServiceList();
 		if ($services) {
+			$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+
 			foreach ($services as $service) {
 				$url->service_code = "{$service->service_code}";
 				$service_name = View::escape($service->service_name);

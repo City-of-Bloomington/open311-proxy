@@ -142,6 +142,23 @@ class Endpoint
 	}
 
 	/**
+	 * Returns only the services matching the given group
+	 *
+	 * @param string $group
+	 * @return array An array of SimpleXMLElements
+	 */
+	public function getGroupServices($group)
+	{
+		$out = array();
+		foreach ($this->services as $service) {
+			if ((string)$service->group == $group) {
+				$out[] = $service;
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Returns a single service entry from GET Service List
 	 *
 	 * @param string $service_code
