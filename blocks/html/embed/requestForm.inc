@@ -16,7 +16,7 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 }
 ?>
 <div class="breadcrumbs">
-	<ul><li><a href="<?php echo BASE_URI."/embed/view?client={$this->client->getId()}"; ?>">
+	<ul><li><a href="<?php echo BASE_URI."/embed?client={$this->client->getId()}"; ?>">
 				All Reports
 			</a>
 		</li>
