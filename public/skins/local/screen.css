@@ -4,7 +4,7 @@
 body { font-family:sans-serif; }
 
 h2 { font-size:131%; font-weight:bold; margin:.5em 0; color:#036; }
-h3 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
+h3 { font-size:110%; font-weight:bold;  margin:.5em 0 .5em 0; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#00f; cursor:pointer; }
 p { margin:0 .5em .5em .5em; }
@@ -18,19 +18,20 @@ tbody th { text-align:right; }
 ul { list-style-type:none; margin:0 0 1em 1em; padding:0; }
 li { margin:0; }
 
-fieldset { margin-bottom:1em; }
-legend { font-weight:bold; }
+fieldset { margin:1em 0; padding:.5em; }
+legend { font-weight:bold; font-size:110%; margin-bottom:.25em; }
 label { font-weight:bold; }
 label.required { padding-right:20px; background:url('images/asterisk.png') right center no-repeat; }
+textarea { width:75%; }
 
 /**
  * Base styles for buttons and button links
  */
 button, .button {
-	border:1px solid #777; border-radius:4px;
+	border:1px solid #ccc;
 	display:inline-block;
-	padding:0 10px 0 30px;
-	font-size:16px; font-weight:bold; color:black;
+	padding:4px 10px 4px 24px;
+	font-size:14px; font-weight:bold; color:black;
 	cursor:pointer;
 }
 .add { background:url('images/plus_button.png') left center no-repeat; }
@@ -80,7 +81,7 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 	background:url('images/emblem-important.png') left center no-repeat;
 }
 
-.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; line-height:20px; }
+.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; margin-left:0; line-height:20px; }
 .breadcrumbs li { list-style:none; float:left; height:20px; padding-left:4px; }
 .breadcrumbs a {
 	display:block;
@@ -90,16 +91,20 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 
 /* Collapsing and Expanding styles */
 .serviceChooser h3 {
-	background:#dddddd url('images/minus.png') 95% center  no-repeat; cursor:pointer;
+	background:#dddddd url('images/minus.png') 95% center no-repeat; padding:5px 10px 5px 3px; cursor:pointer;
 }
+.serviceChooser h3 a { color:black; }
 .collapsed h3 { background:#dddddd url('images/plus.png') 95% center no-repeat; }
 .collapsed ul { display:none; }
-
+.serviceChooser li { margin:.25em; }
 
 #location_map {
 	width:100%; height:300px;
 	border:2px solid black;
 }
+
+/* Form styles */
+.clientRequestForm form { border:3px solid #ddd; padding:.5em 0 }
 
 /* YUI styles */
 .yui3-overlay { width:90%; }
