@@ -220,6 +220,9 @@ class Endpoint
 				}
 			}
 		}
+		if (isset($_FILES['media']['name'])) {
+			$request['media'] = "@{$_FILES['media']['tmp_name']};type={$_FILES['media']['type']};filename={$_FILES['media']['name']}";
+		}
 		$open311 = curl_init("{$this->getUrl()}/requests.xml");
 		curl_setopt_array($open311, array(
 			CURLOPT_POST=>true,
