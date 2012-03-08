@@ -16,7 +16,7 @@ thead th { text-align:left; }
 tbody th { text-align:right; }
 
 ul { list-style-type:none; margin:0 0 1em 1em; padding:0; }
-li { margin:.75em 0; }
+li { }
 li fieldset { margin:.25em 0; }
 fieldset { margin:1em 0; padding:.5em; }
 legend { font-weight:bold; font-size:110%; margin-bottom:.25em; }
@@ -105,6 +105,7 @@ header nav a { font-weight:bold; color:black; margin-right:1em; }
 
 /* Form styles */
 .clientRequestForm form { border:3px solid #ddd; padding:.5em 0 }
+.clientRequestForm li { margin:.75em 0; }
 
 /* YUI styles */
 .yui3-overlay { width:90%; }
