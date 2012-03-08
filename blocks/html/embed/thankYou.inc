@@ -10,4 +10,13 @@
 <div class="thankYou">
 	<h2><?php echo View::escape($this->endpoint->getName()); ?></h2>
 	<p>Thank you for the report.</p>
+	<?php
+		if (!empty($_REQUEST['client'])) {
+			echo "
+			<p>Do you want to
+				<a href=\"".BASE_URI."/embed?client=$_REQUEST[client]\">file another report?</a>
+			</p>
+			";
+		}
+	?>
 </div>

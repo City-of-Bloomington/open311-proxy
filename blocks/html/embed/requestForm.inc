@@ -27,7 +27,7 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 	<h2><?php echo $service_name; ?></h2>
 	<p class="service_description"><?php echo $service_description; ?></p>
 
-	<form method="post" action="<?php echo BASE_URI; ?>/embed">
+	<form method="post" action="<?php echo BASE_URI; ?>/embed" enctype="multipart/form-data">
 		<fieldset><legend>Location</legend>
 			<div>
 				<span id="location"><?php echo $address_string; ?></span>
@@ -139,6 +139,11 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 			</ul>
 		</fieldset>
 
+		<fieldset><legend>Media</legend>
+			<p>Upload a photo</p>
+			<input type="file" name="media" />
+		</fieldset>
+
 		<fieldset>
 			<input name="client" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
@@ -160,6 +165,6 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 </script>
 <?php
 	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
+	$this->template->addToAsset('scripts','https://maps.googleapis.com/maps/api/js?sensor=true');
 	$this->template->addToAsset('scripts',BASE_URL.'/js/map_picker.js');
 ?>
