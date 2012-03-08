@@ -16,8 +16,8 @@ thead th { text-align:left; }
 tbody th { text-align:right; }
 
 ul { list-style-type:none; margin:0 0 1em 1em; padding:0; }
-li { margin:0; }
-
+li { margin:.75em 0; }
+li fieldset { margin:.25em 0; }
 fieldset { margin:1em 0; padding:.5em; }
 legend { font-weight:bold; font-size:110%; margin-bottom:.25em; }
 label { font-weight:bold; }
