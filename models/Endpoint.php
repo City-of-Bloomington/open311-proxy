@@ -150,7 +150,7 @@ class Endpoint
 	public function getGroupServices($group)
 	{
 		$out = array();
-		foreach ($this->services as $service) {
+		foreach ($this->getServiceList() as $service) {
 			if ((string)$service->group == $group) {
 				$out[] = $service;
 			}
