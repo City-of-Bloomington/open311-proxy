@@ -15,7 +15,9 @@
 			HOST.origin = e.origin;
 		}
 	}
-	window.addEventListener('message',handleMessage,false);
+	if (window.addEventListener) {
+		window.addEventListener('message',handleMessage,false);
+	}
 	</script>
 	<div id="panel-container">
 		<div id="content-panel">
