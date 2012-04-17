@@ -215,8 +215,8 @@ class Endpoint
 		if ($service && $service->attributes) {
 			foreach ($service->attributes->attribute as $attribute) {
 				$code = "{$attribute->code}";
-				if (isset($_POST[$code])) {
-					$request[$code] = $_POST[$code];
+				if (isset($_POST['attribute'][$code])) {
+					$request['attribute'][$code] = $_POST['attribute'][$code];
 				}
 			}
 		}
@@ -228,15 +228,39 @@ class Endpoint
 			CURLOPT_POST=>true,
 			CURLOPT_HEADER=>false,
 			CURLOPT_RETURNTRANSFER=>true,
-			CURLOPT_POSTFIELDS=>$request,
+			CURLOPT_POSTFIELDS=>$this->flatten_request_array($request),
 			CURLOPT_SSL_VERIFYPEER=>false
 		));
 		$response = curl_exec($open311);
 		if (!$response) {
 			throw new Exception(curl_error($open311));
 		}
-
 		return simplexml_load_string($response);
+	}
+
+	/**
+	 * Creates a curl fields array from a POST array
+	 *
+	 * Curl does not allow multidimensional arrays.
+	 * Instead, you must flatten the multidimensional arrays into
+	 * simple fieldname strings
+	 */
+	private function flatten_request_array(array $request, $prefix=null)
+	{
+		$out = array();
+		foreach ($request as $key=>$value) {
+			if (!is_array($value)) {
+				if ($prefix) { $out[$prefix."[$key]"] = $value; }
+				else         { $out[$key]             = $value; }
+			}
+			else {
+				$out = array_merge(
+					$out,
+					$this->flatten_request_array($value, $prefix ? $prefix."[$key]" : $key)
+				);
+			}
+		}
+		return $out;
 	}
 
 	public function getRequestId()

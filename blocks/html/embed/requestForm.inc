@@ -73,10 +73,11 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 							case 'singlevaluelist':
 								echo "
 								<li><label for=\"$code\">$description</label>
-									<div><select name=\"$code\" id=\"$code\"><option></option>
+									<div><select name=\"attribute[$code]\" id=\"$code\"><option></option>
 								";
 										foreach ($attribute->values->value as $value) {
-											$selected = (!empty($_POST[$code]) && $_POST[$code]==$value->$key)
+											$selected = (!empty($_POST['attribute'][$code])
+														&& $_POST['attribute'][$code] == $value->key)
 												? 'selected="selected"'
 												: '';
 											$k = View::escape($value->key);
@@ -96,14 +97,16 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 									<ul>
 								";
 									foreach ($attribute->values->value as $value) {
-										$checked = (isset($_POST[$code]) && is_array($_POST[$code]) && in_array($value->key, $_POST[$code]))
+										$checked = (isset($_POST['attribute'][$code])
+													&& is_array($_POST['attribute'][$code])
+													&& in_array($value->key, $_POST['attribute'][$code]))
 											? 'checked="checked"'
 											: '';
 										$k = View::escape($value->key);
 										$n = View::escape($value->name);
 										echo "
 										<li><label>
-												<input name=\"{$code}[]\" type=\"checkbox\" value=\"$k\" $checked />
+												<input name=\"attribute[{$code}][]\" type=\"checkbox\" value=\"$k\" $checked />
 												$n
 											</label>
 										</li>
@@ -117,19 +120,23 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 								break;
 
 							case 'text':
-								$n = !empty($_POST[$code]) ? View::escape($_POST[$code]) : '';
+								$n = !empty($_POST['attribute'][$code])
+									? View::escape($_POST['attribute'][$code])
+									: '';
 								echo "
 								<li><label for=\"$code\">$description</label>
-									<div><textarea name=\"$code\" id=\"$code\">$n</textarea></div>
+									<div><textarea name=\"attribute[$code]\" id=\"$code\">$n</textarea></div>
 								</li>
 								";
 								break;
 
 							default:
-								$n = !empty($_POST[$code]) ? View::escape($_POST[$code]) : '';
+								$n = !empty($_POST['attribute'][$code])
+									? View::escape($_POST['attribute'][$code])
+									: '';
 								echo "
 								<li><label for=\"$code\">$description</label>
-									<div><input name=\"$code\" id=\"$code\" value=\"$n\" /></div>
+									<div><input name=\"attribute[$code]\" id=\"$code\" value=\"$n\" /></div>
 								</li>
 								";
 						}
