@@ -235,7 +235,15 @@ class Endpoint
 		if (!$response) {
 			throw new Exception(curl_error($open311));
 		}
-		return simplexml_load_string($response);
+		$xml = simplexml_load_string($response);
+		if (!$xml) {
+			echo "------Error from Open311 server----------\n";
+			echo $response;
+			exit();
+		}
+		else {
+			return $xml;
+		}
 	}
 
 	/**
