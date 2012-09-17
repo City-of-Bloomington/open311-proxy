@@ -9,7 +9,7 @@ include '../configuration.inc';
 // Check for routes
 if (preg_match('|'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?|',$_SERVER['REQUEST_URI'],$matches)) {
 	$resource = isset($matches[2]) ? $matches[2] : 'index';
-	$action = isset($matches[4]) ? $matches[4] : 'index';
+	$action   = isset($matches[4]) ? $matches[4] : 'index';
 }
 
 // Create the default Template
@@ -18,7 +18,7 @@ $template = !empty($_REQUEST['format'])
 	: new Template('default');
 
 // Execute the Controller::action()
-if (isset($resource) && isset($action)) {
+if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	$USER_ROLE = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';
 	if ($ZEND_ACL->isAllowed($USER_ROLE, $resource, $action)) {
 		$controller = ucfirst($resource).'Controller';
