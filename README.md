@@ -34,12 +34,18 @@ The open311-proxy embed website will use postMessage() to tell the parent site t
 
 	<script type="text/javascript">
 		function handleHeightResponse(e) {
-			document.getElementById('open311Client').height = parseInt(e.data + 60);
+			var iFrame = document.getElementById('open311Client'),
+				calcHeight = 0;
+
+			calcHeight = parseInt(e.data + 60);
+			if (!calcHeight || calcHeight < 300) { calcHeight = 300; }
+			iFrame.height = calcHeight;
 		}
 		if (window.addEventListener) window.addEventListener('message', handleHeightResponse, false);
 	</script>
 	<iframe id="open311Client"
 			src="http://OPEN311_PROXY/embed?client=XXXX"
-			height=\"720\"
+			height=\"400\"
+			width=\"640\"
 			onload=\"this.contentWindow.postMessage('height','http://OPEN311_PROXY');\"></iframe>
 
