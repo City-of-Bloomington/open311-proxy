@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Endpoint
+class Endpoint extends ActiveRecord
 {
-	private $data;
+	protected $tablename = 'endpoints';
 
 	private $services; // SimpleXML object from GET Service List response
 	private $serviceDefinitions = array(); // Array of SimpleXMLElements with service_code as the key
@@ -44,59 +44,34 @@ class Endpoint
 
 	public function validate()
 	{
-		if (!$this->getUrl() || !$this->getName()
-			|| !$this->getJurisdiction() || !$this->getApi_key()) {
+		if (!$this->getUrl() || !$this->getName() || !$this->getJurisdiction()) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
 
-	public function save()
-	{
-		$this->validate();
-		$zend_db = Database::getConnection();
-
-		if ($this->getId()) {
-			$zend_db->update('endpoints',$this->data,"id={$this->getId()}");
-		}
-		else {
-			$zend_db->insert('endpoints',$this->data);
-			$this->data['id'] = $zend_db->lastInsertId('endpoints','id');
-		}
-	}
+	public function save()   { parent::save();   }
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	public function getField($field)
-	{
-		if (isset($this->data[$field])) {
-			return $this->data[$field];
-		}
-	}
-	public function getId()				{ return $this->getField('id'); }
-	public function getUrl()			{ return $this->getField('url'); }
-	public function getName()			{ return $this->getField('name'); }
-	public function getJurisdiction()	{ return $this->getField('jurisdiction'); }
-	public function getApi_key()		{ return $this->getField('api_key'); }
-	public function getLatitude()		{ return $this->getField('latitude'); }
-	public function getLongitude()		{ return $this->getField('longitude'); }
+	public function getId()           { return parent::get('id');           }
+	public function getUrl()          { return parent::get('url');          }
+	public function getName()         { return parent::get('name');         }
+	public function getJurisdiction() { return parent::get('jurisdiction'); }
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-	public function setUrl($string)				{ $this->data['url']			= trim($string); }
-	public function setName($string)			{ $this->data['name']			= trim($string); }
-	public function setJurisdiction($string)	{ $this->data['jurisdiction']	= trim($string); }
-	public function setApi_key($string)			{ $this->data['api_key']		= trim($string); }
-	public function setLatitude($float)			{ $this->data['latitude']		= (float)$float; }
-	public function setLongitude($float)		{ $this->data['longitude']		= (float)$float; }
+	public function setUrl         ($s) { parent::set('url',          $s); }
+	public function setName        ($s) { parent::set('name',         $s); }
+	public function setJurisdiction($s)	{ parent::set('jurisdiction', $s); }
 
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
-		$fields = array('url','name','jurisdiction','api_key','latitude','longitude');
+		$fields = array('url','name','jurisdiction');
 		foreach ($fields as $field) {
 			if (isset($post)) {
 				$set = 'set'.ucfirst($field);

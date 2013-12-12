@@ -4,11 +4,20 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Client
+class Client extends ActiveRecord
 {
-	private $data;
+	protected $tablename = 'clients';
 
-	private $endpoint;
+	protected $endpoint;
+
+	private $services; // SimpleXML object from GET Service List response
+	private $serviceDefinitions = array(); // Array of SimpleXMLElements with service_code as the key
+
+	public static $optionalOpen311Fields = array(
+		'address_string','lat','long',
+		'first_name','last_name','phone','email',
+		'description'
+	);
 
 	public function __construct($id=null)
 	{
@@ -47,53 +56,32 @@ class Client
 		}
 	}
 
-	public function save()
-	{
-		$this->validate();
-		$zend_db = Database::getConnection();
+	public function save()   { parent::save();   }
+	public function delete() { parent::delete(); }
 
-		if ($this->getId()) {
-			$zend_db->update('clients',$this->data,"id={$this->getId()}");
-		}
-		else {
-			$zend_db->insert('clients',$this->data);
-			$this->data['id'] = $zend_db->lastInsertId('clients','id');
-		}
-	}
-
-	public function delete()
-	{
-		if ($this->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->delete('clients',"id={$this->getId()}");
-		}
-	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	public function getField($field)
-	{
-		if (isset($this->data[$field])) {
-			return $this->data[$field];
-		}
-	}
-	public function getId()				{ return $this->getField('id'); }
-	public function getUrl()			{ return $this->getField('url'); }
-	public function getName()			{ return $this->getField('name'); }
-	public function getEndpoint_id()	{ return $this->getField('endpoint_id'); }
-	public function getApi_key()		{ return $this->getField('api_key'); }
+	public function getId()          { return parent::get('id');          }
+	public function getUrl()         { return parent::get('url');         }
+	public function getName()        { return parent::get('name');        }
+	public function getApi_key()     { return parent::get('api_key');     }
+	public function getEndpoint_id() { return parent::get('endpoint_id'); }
+	public function getEndpoint()    { return parent::getForeignKeyObject('Endpoint', 'endpoint_id'); }
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-	public function setUrl($string)		{ $this->data['url']		= trim($string); }
-	public function setName($string)	{ $this->data['name']		= trim($string); }
-	public function setApi_key($string)	{ $this->data['api_key']	= trim($string); }
+	public function setUrl    ($s) { parent::set('url',     $s); }
+	public function setName   ($s) { parent::set('name',    $s); }
+	public function setApi_key($s) { parent::set('api_key', $s); }
+	public function setEndpoint_id($id)    { parent::setForeignKeyField( 'Endpoint', 'endpoint_id', $id); }
+	public function setEndpoint(Person $p) { parent::setForeignKeyObject('Endpoint', 'endpoint_id', $p);  }
 
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		$fields = array('name','url','endpoint_id','api_key');
 		foreach ($fields as $field) {
@@ -104,38 +92,38 @@ class Client
 		}
 	}
 	//----------------------------------------------------------------
-	// Custom Functions
+	// Open311 API Functions
 	//----------------------------------------------------------------
-
 	/**
-	 * @return Endpoint
+	 * @return array
 	 */
-	public function getEndpoint()
+	public function getServiceGroups()
 	{
-		if (!$this->endpoint) {
-			if ($this->getEndpoint_id()) {
-				$this->endpoint = new Endpoint($this->getEndpoint_id());
+		$groups = array();
+		$services = $this->getServiceList();
+		if ($services) {
+			foreach ($services->service as $service) {
+				$group = "{$service->group}";
+				if (!in_array($group, $groups)) {
+					$groups[] = $group;
+				}
 			}
 		}
-		return $this->endpoint;
+		return $groups;
 	}
 
 	/**
-	 * @param string $id
+	 * @return SimpleXMLElement
 	 */
-	public function setEndpoint_id($id)
+	public function getServiceList()
 	{
-		$this->endpoint = new Endpoint($id);
-		$this->data['endpoint_id'] = $this->endpoint->getId();
+		if (!$this->services) {
+			$url = "{$this->getUrl()}/services.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
+			$services = $this->queryServer($url);
+			if ($services) {
+				$this->services = $services;
+			}
+		}
+		return $this->services;
 	}
-
-	/**
-	 * @param Endpoint $endpoint
-	 */
-	public function setEndpoint(Endpoint $endpoint)
-	{
-		$this->data['endpoint_id'] = $endpoint->getId();
-		$this->endpoint = $endpoint;
-	}
-
 }

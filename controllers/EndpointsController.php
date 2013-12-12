@@ -29,7 +29,7 @@ class EndpointsController extends Controller
 			: new Endpoint();
 
 		if (isset($_POST['url'])) {
-			$endpoint->set($_POST);
+			$endpoint->handleUpdate($_POST);
 			try {
 				$endpoint->save();
 				header('Location: '.BASE_URL.'/endpoints/view?endpoint_id='.$endpoint->getId());

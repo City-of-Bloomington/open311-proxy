@@ -16,10 +16,7 @@ create table endpoints (
 	id int unsigned not null primary key auto_increment,
 	url varchar(255) not null,
 	name varchar(128) not null,
-	jurisdiction varchar(128),
-	api_key varchar(128),
-	latitude float,
-	longitude float
+	jurisdiction varchar(128)
 );
 
 create table clients (
