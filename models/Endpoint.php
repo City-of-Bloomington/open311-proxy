@@ -58,6 +58,7 @@ class Endpoint extends ActiveRecord
 	public function getUrl()          { return parent::get('url');          }
 	public function getName()         { return parent::get('name');         }
 	public function getJurisdiction() { return parent::get('jurisdiction'); }
+	public function getApi_key()      { return parent::get('api_key');      }
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -65,6 +66,7 @@ class Endpoint extends ActiveRecord
 	public function setUrl         ($s) { parent::set('url',          $s); }
 	public function setName        ($s) { parent::set('name',         $s); }
 	public function setJurisdiction($s)	{ parent::set('jurisdiction', $s); }
+	public function setApi_key     ($s) { parent::set('api_key',      $s); }
 
 	/**
 	 * @param array $post
