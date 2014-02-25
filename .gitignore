@@ -1,1 +1,4 @@
+build
+dist
 configuration.inc
+data/sessions/*
