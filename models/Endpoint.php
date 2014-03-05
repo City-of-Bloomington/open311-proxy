@@ -59,6 +59,8 @@ class Endpoint extends ActiveRecord
 	public function getName()         { return parent::get('name');         }
 	public function getJurisdiction() { return parent::get('jurisdiction'); }
 	public function getApi_key()      { return parent::get('api_key');      }
+	public function getLatitude()     { return parent::get('latitude');     }
+	public function getLongitude()    { return parent::get('longitude');    }
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -67,13 +69,15 @@ class Endpoint extends ActiveRecord
 	public function setName        ($s) { parent::set('name',         $s); }
 	public function setJurisdiction($s)	{ parent::set('jurisdiction', $s); }
 	public function setApi_key     ($s) { parent::set('api_key',      $s); }
+	public function setLatitude    ($f) { parent::set('latitude', (float)$f); }
+	public function setLongitude   ($f) { parent::set('longitude',(float)$f); }
 
 	/**
 	 * @param array $post
 	 */
 	public function handleUpdate($post)
 	{
-		$fields = array('url','name','jurisdiction');
+		$fields = array('url','name','jurisdiction', 'latitude', 'longitude');
 		foreach ($fields as $field) {
 			if (isset($post)) {
 				$set = 'set'.ucfirst($field);

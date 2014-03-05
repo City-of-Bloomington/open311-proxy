@@ -161,10 +161,10 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 </div>
 <script type="text/javascript">
 <?php
-	$lat = $endpoint->getLatitude() ? $endpoint->getLatitude() : DEFAULT_LATITUDE;
+	$lat  = $endpoint->getLatitude()  ? $endpoint->getLatitude()  : DEFAULT_LATITUDE;
 	$long = $endpoint->getLongitude() ? $endpoint->getLongitude() : DEFAULT_LONGITUDE;
 	echo "
-	var DEFAULT_LATITUDE = $lat,
+	var DEFAULT_LATITUDE  = $lat,
 		DEFAULT_LONGITUDE = $long,
 		BASE_URL = '".BASE_URL."';
 	";
