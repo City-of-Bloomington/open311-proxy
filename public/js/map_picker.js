@@ -27,7 +27,12 @@ YUI().use('node','overlay','json',function(Y) {
 		}
 		var crosshairs = new google.maps.Marker({
 			map: map,
-			icon:BASE_URL + '/js/cross-hairs.png'
+			icon: {
+				url: BASE_URL + '/js/cross-hairs.png',
+				size:   new google.maps.Size(70,70),
+				origin: new google.maps.Point(0,0),
+				anchor: new google.maps.Point(35,35)
+			}
 		});
 		crosshairs.bindTo('position',map,'center');
 
