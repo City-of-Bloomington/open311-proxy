@@ -39,19 +39,19 @@ foreach (Endpoint::$optionalOpen311Fields as $field) {
 			<input name="long" id="long" type="hidden" value="<?php echo $long; ?>" />
 		</fieldset>
 
-		<fieldset><legend>Contact Information</legend>
+		<fieldset><legend>Contact Info</legend>
 			<table>
 				<tr><td><label for="first_name">First Name</label></td>
-					<td><input name="first_name" id="first_name" value="<?php echo $first_name; ?>" /></td>
+					<td><input name="first_name" id="first_name" value="<?php echo $first_name; ?>" type="text" /></td>
 				</tr>
 				<tr><td><label for="last_name">Last Name</label></td>
-					<td><input name="last_name" id="last_name" value="<?php echo $last_name; ?>" /></td>
+					<td><input name="last_name" id="last_name" value="<?php echo $last_name; ?>" type="text" /></td>
 				</tr>
 				<tr><td><label for="phone">Phone</label></td>
-					<td><input name="phone" id="phone" value="<?php echo $phone; ?>" /></td>
+					<td><input name="phone" id="phone" value="<?php echo $phone; ?>" type="text" /></td>
 				</tr>
 				<tr><td><label for="email">Email</label></td>
-					<td><input name="email" id="email" value="<?php echo $email; ?>" /></td>
+					<td><input name="email" id="email" value="<?php echo $email; ?>" type="text" /></td>
 				</tr>
 			</table>
 		</fieldset>

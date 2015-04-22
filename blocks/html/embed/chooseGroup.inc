@@ -8,8 +8,7 @@
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URI.'/js/groupChooser.js');
 ?>
-<div id="groupChooser">
-	<h2>All Reports</h2>
+<div id="groupChooser" class="cob-open311Client-groupChooser">
 	<?php
 		foreach ($this->endpoint->getServiceGroups() as $group) {
 			if ($group) {

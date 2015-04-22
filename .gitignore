@@ -2,3 +2,8 @@ build
 dist
 configuration.inc
 data/sessions/*
+node_modules
+package.json
+gulpfile.js
+.ftppass
+.build
