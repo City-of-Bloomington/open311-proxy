@@ -7,3 +7,8 @@
 configuration.inc
 /data/sessions/*
 /scripts/backup.cnf
+node_modules
+package.json
+gulpfile.js
+.ftppass
+.build
