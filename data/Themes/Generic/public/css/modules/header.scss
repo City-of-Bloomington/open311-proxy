@@ -1,0 +1,19 @@
+/**
+ * Banner
+ */
+body > header {
+    color:#fff; background-color:#036; margin:0;
+
+    a { color:#fff; font-weight:bold; }
+    h1 { margin:0 4px; font-size:174%; }
+    #nav1 {
+        margin-top:5px; padding:5px;
+        background-color:#fff;
+        border-top:2px solid #000; border-bottom:2px solid #000;
+
+        a { font-weight:bold; color:black; margin-right:1em; }
+    }
+
+    .menuLinks a { color:#00f; margin:.5em; }
+}
+

@@ -1,49 +1,48 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Endpoint;
+use Application\Models\EndpointTable;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Block;
+
 class EndpointsController extends Controller
 {
-	public function index()
-	{
-		$list = new EndpointList();
-		$list->find();
-		$this->template->blocks[] = new Block(
-			'endpoints/list.inc',
-			array('endpointList'=>$list)
-		);
-	}
+    public function index()
+    {
+        $table = new EndpointTable();
+        $list  = $table->find();
+        return new \Application\Views\Endpoints\ListView(['endpoints'=>$list]);
+    }
 
-	public function view()
-	{
-		$endpoint = $this->loadEndpoint($_REQUEST['endpoint_id']);
-		$this->template->blocks[] = new Block('endpoints/info.inc',array('endpoint'=>$endpoint));
-	}
+    public function view()
+    {
+        $endpoint = $this->loadEndpoint($_GET['id']);
+        return new \Application\Views\Endpoints\InfoView(['endpoint'=>$endpoint]);
+    }
 
-	public function update()
-	{
-		$endpoint = !empty($_REQUEST['endpoint_id'])
-			? $this->loadEndpoint($_REQUEST['endpoint_id'])
-			: new Endpoint();
+    public function update()
+    {
+        $endpoint = !empty($_REQUEST['id'])
+            ? $this->loadEndpoint($_REQUEST['id'])
+            : new Endpoint();
 
-		if (isset($_POST['url'])) {
-			$endpoint->handleUpdate($_POST);
-			try {
-				$endpoint->save();
-				header('Location: '.BASE_URL.'/endpoints/view?endpoint_id='.$endpoint->getId());
-				exit();
-			}
-			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-		$this->template->blocks[] = new Block(
-			'endpoints/updateForm.inc',
-			array('endpoint'=>$endpoint)
-		);
-	}
+        if (isset($_POST['name'])) {
+            try {
+                $endpoint->handleUpdate($_POST);
+                $endpoint->save();
+                header('Location: '.self::generateUrl('endpoints.index'));
+                exit();
+            }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        return new \Application\Views\Endpoints\UpdateView(['endpoint'=>$endpoint]);
+    }
 
 	/**
 	 * @return Endpoint
@@ -55,7 +54,7 @@ class EndpointsController extends Controller
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL.'/endpoints');
+			header('Location: '.self::generateUrl('endpoints.index'));
 			exit();
 		}
 	}

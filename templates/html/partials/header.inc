@@ -1,9 +1,11 @@
-<head>
-	<style type="text/css" media="screen">
-		@import url('<?php echo BASE_URL; ?>/skins/local/reset.css');
-		@import url('<?php echo BASE_URL; ?>/skins/local/layouts/<?php echo $this->layout; ?>.css');
-		@import url('<?php echo BASE_URL; ?>/skins/local/screen.css');
-	</style>
+<header>
+    <h1><a href="<?php echo BASE_URI; ?>"><?php echo self::escape(APPLICATION_NAME); ?></a></h1>
+    <div class="utilityBar">
+    <?php
+        $this->addToAsset('scripts', BASE_URI.'/js/menus.js');
 
-	<title><?php echo APPLICATION_NAME; ?></title>
-</head>
+        $this->_include('/partials/panel-widgets/User_menu.inc');
+        $this->_include('/partials/panel-widgets/Administrator_menu.inc');
+    ?>
+    </div>
+</header>

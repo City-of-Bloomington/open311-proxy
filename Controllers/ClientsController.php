@@ -1,50 +1,54 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Client;
+use Application\Models\ClientTable;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Block;
+
 class ClientsController extends Controller
 {
-	public function index()
-	{
-		$list = new ClientList();
-		$list->find();
-		$this->template->blocks[] = new Block('clients/list.inc', array('clientList'=>$list));
-	}
+    public function index()
+    {
+        $table = new ClientTable();
+        $clients = $table->find();
+        return new \Application\Views\Clients\ListView(['clients' => $clients]);
+    }
 
-	public function update()
-	{
-		$client = !empty($_REQUEST['client_id'])
-			? $this->loadClient($_REQUEST['client_id'])
-			: new Client();
+    public function update()
+    {
+        $client = !empty($_REQUEST['id'])
+            ? $this->loadClient($_REQUEST['id'])
+            : new Client();
 
-		if (isset($_POST['name'])) {
-			$client->handleUpdate($_POST);
-			try {
-				$client->save();
-				header('Location: '.BASE_URL.'/clients');
-				exit();
-			}
-			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-		$this->template->blocks[] = new Block('clients/updateForm.inc', array('client'=>$client));
-	}
+        if (isset($_POST['name'])) {
+            try {
+                $client->handleUpdate($_POST);
+                $client->save();
+                header('Location: '.self::generateUrl('clients.index'));
+                exit();
+            }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+        return new \Application\Views\Clients\UpdateView(['client'=>$client]);
+    }
 
-	public function delete()
-	{
-		$client = $this->loadClient($_REQUEST['client_id']);
-		try {
-			$client->delete();
-		}
-		catch (Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-		}
-		header('Location: '.BASE_URL.'/clients');
-		exit();
-	}
+    public function delete()
+    {
+        $client = $this->loadClient($_REQUEST['id']);
+        try {
+            $client->delete();
+        }
+        catch (\Exception $e) {
+            $_SESSION['errorMessages'][] = $e;
+        }
+        header('Location: '.self::generateUrl('clients.index'));
+        exit();
+    }
 
 	/**
 	 * @return Client
@@ -56,9 +60,8 @@ class ClientsController extends Controller
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL.'/clients');
+			header('Location: '.self::generateUrl('clients.index'));
 			exit();
 		}
 	}
-
 }

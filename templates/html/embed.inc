@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<?php
-	$this->layout = 'full-width';
-	include __DIR__.'/partials/header.inc';
-?>
-<body>
+<?php $this->_include('partials/head.inc'); ?>
+<body class="full-width">
 	<script type="text/javascript">
 	var HOST = {};
 	function handleMessage(e) {
@@ -19,20 +16,16 @@
 		window.addEventListener('message',handleMessage,false);
 	}
 	</script>
-	<div id="panel-container">
-		<div id="content-panel">
+	<main>
+        <div class="panel" id="content-panel">
 			<?php
-				include FRAMEWORK.'/errorMessages.php';
+                include BLOSSOM.'/errorMessages.php';
 
 				echo $this->includeBlocks();
 			?>
 		</div>
-	</div>
-	<?php
-		include __DIR__.'/partials/footer.inc';
-	?>
+	</main>
+	<?php $this-> _include('partials/footer.inc'); ?>
 </body>
 </html>
-<?php
-	include __DIR__.'/partials/garbageCollection.inc';
-?>
+<?php $this->_include('partials/garbageCollection.inc'); ?>

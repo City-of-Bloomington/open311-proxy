@@ -5,10 +5,12 @@
 .git/
 .git*
 configuration.inc
+site_config.inc
+backup.cnf
 /data/sessions/*
-/scripts/backup.cnf
 node_modules
-package.json
-gulpfile.js
+.gulp-build
 .ftppass
-.build
+gulpfile.js
+composer.lock
+.sass-cache

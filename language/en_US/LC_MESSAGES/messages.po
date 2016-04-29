@@ -1,0 +1,34 @@
+# Translation
+# Copyright (C) 2013-2016 City of Bloomington
+# This file is distributed under the same license as the open311-proxy package.
+domain "messages"
+
+msgid ""
+msgstr ""
+"Project-Id-Version: open311-proxy\n"
+"PO-Revision-Date: \n"
+"Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
+"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
+"Language-Team: City of Bloomington <dev@bloomington.in.gov>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "signed_in_as"
+msgstr "Signed in as %s"
+
+msgid "endpointInfoHelp"
+msgstr ""
+"Configure an endpoint you have established a relationship with. "
+"You must have signed up for at least one api_key from the Open311 "
+"server at the endpoint.  This will be the default api_key for "
+"posting to the endpoint."
+"Additional clients for this endpoint can also have their own api_keys."
+
+msgid "endpointCoordinatesHelp"
+msgstr ""
+"You can specify lat/long for the endpoint.  Lat/long will be used "
+"to center the map on the client request form."
+

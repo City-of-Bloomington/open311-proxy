@@ -1,42 +1,46 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$ZEND_ACL = new Zend_Acl();
-$ZEND_ACL->addRole(new Zend_Acl_Role('Anonymous'))
-		 ->addRole(new Zend_Acl_Role('Public'), 'Anonymous')
-		 ->addRole(new Zend_Acl_Role('Staff'), 'Public')
-		 ->addRole(new Zend_Acl_Role('Administrator'), 'Staff');
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+
+$ZEND_ACL = new Acl();
+$ZEND_ACL->addRole(new Role('Anonymous'))
+		 ->addRole(new Role('Public'),        'Anonymous')
+		 ->addRole(new Role('Staff'),         'Public')
+		 ->addRole(new Role('Administrator'), 'Staff');
 
 /**
  * Declare all the resources
  */
-$ZEND_ACL->add(new Zend_Acl_Resource('index'));
-$ZEND_ACL->add(new Zend_Acl_Resource('people'));
-$ZEND_ACL->add(new Zend_Acl_Resource('users'));
-$ZEND_ACL->add(new Zend_Acl_Resource('login'));
+$ZEND_ACL->addResource(new Resource('index'));
+$ZEND_ACL->addResource(new Resource('people'));
+$ZEND_ACL->addResource(new Resource('users'));
+$ZEND_ACL->addResource(new Resource('login'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('endpoints'));
-$ZEND_ACL->add(new Zend_Acl_Resource('clients'));
-$ZEND_ACL->add(new Zend_Acl_Resource('embed'));
+$ZEND_ACL->addResource(new Resource('endpoints'));
+$ZEND_ACL->addResource(new Resource('clients'));
+$ZEND_ACL->addResource(new Resource('embed'));
 
 /**
  * Assign permissions to the resources
  */
-$ZEND_ACL->allow(null,
-				array('login','embed'));
+$ZEND_ACL->allow(null,['login', 'embed']);
 
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null,
-				array('index'),
-				array('index'));
+				['index'],
+				['index']);
 
 // Allow Staff to do stuff
 $ZEND_ACL->allow('Staff',
-				array('people', 'endpoints', 'clients'),
-				array('index', 'view'));
+                ['people', 'endpoints', 'clients'],
+                ['index','view']);
+
 
 // Administrator is allowed access to everything
 $ZEND_ACL->allow('Administrator');

@@ -1,128 +1,23 @@
 <?php
 /**
- * Displayed in the banner
- */
-define('APPLICATION_NAME','application_name');
-
-/**
  * Where on the filesystem this application is installed
  */
-define('APPLICATION_HOME','/var/www/sites/application_name');
+define('APPLICATION_HOME', __DIR__);
+define('BLOSSOM', APPLICATION_HOME.'/vendor/City-of-Bloomington/blossom-lib');
 
 /**
- * The URL to get to this site
- * Do NOT use a trailing slash
- */
-define('BASE_URL','http://localhost/application_name');
-define('BASE_URI','/application_name');
-
-
-/**
- * Where on the filesystem the framework is installed.
- */
-define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
-
-/**
- * This needs to point to the library directory inside your
- * installation of the ZendFramework
- * http://framework.zend.com
- */
-define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
-
-
-/**
- * Used when there's an error on the site.  The Framework will
- * print out a nice error message, encouraging users to report any problems
- * See: FRAMEWORK/ITSFunctions.inc
+ * Multi-Site support
  *
- * This is also the default Admin user information that gets added to the database
- */
-define('ADMINISTRATOR_NAME','Site Admin');
-define('ADMINISTRATOR_EMAIL','admin@servername.com');
-
-/**
- * Set how we want to handle errors
- * PHP_DEFAULT - do whatever's configured in php.ini
+ * To allow multiple sites to use this same install base,
+ * define the SITE_HOME variable in the Apache config for each
+ * site you want to host.
  *
- * If you do not define error handling to PHP_DEFAULT
- * the custom error handlers kick in.  All of the custom error display
- * frunctions are in FRAMEWORK/globalFunctions.inc.  The custom error
- * function decide what to do based on $ERROR_REPORING array values
- *
- * PRETTY_PRINT - Display a message in the browser
- * EMAIL_ADMIN - email the Administrator
- * EMAIL_USER - email the logged in user
- * SKIDDER - post errors to a Skidder server (see config below)
-*/
-define('ERROR_REPORTING','PHP_DEFAULT');
-//define('ERROR_REPORTING','CUSTOM');
-//$ERROR_REPORTING = array('PRETTY_PRINT','SKIDDER');
-
-/**
- * Skidder is a web service for error notifications.  Error reporting supports
- * posting errors to a Skidder server.  You must register for an application_id
- * on the skidder server you want to post errors to.
+ * SITE_HOME is the directory where all site-specific data and
+ * configuration are stored.  For backup purposes, backing up this
+ * directory would be sufficient for an easy full restore.
  */
-//define('SKIDDER_URL','https://localhost/skidder/');
-//define('SKIDDER_APPLICATION_ID',);
-
-/**
- * Database Setup
- * Refer to the PDO documentation for DSN sytnax for your database type
- * http://www.php.net/manual/en/pdo.drivers.php
- */
-define('DB_ADAPTER','Pdo_Mysql');
-define('DB_HOST','localhost');
-define('DB_NAME',APPLICATION_NAME);
-define('DB_USER',APPLICATION_NAME);
-define('DB_PASS','password');
-
-/**
- * Directory Configuration
- *
- * This is required in order to use the LDAP or ADS authentication
- * If you do not want to use external authentication, you can comment this out
- */
-// Example for ADS style authentication
-define('DIRECTORY_SERVER','ldaps://example.org:636');
-define('DIRECTORY_BASE_DN','OU=Department,DC=example,DC=org');
-define('DIRECTORY_USERNAME_ATTRIBUTE', 'CN');
-define('DIRECTORY_USER_BINDING','{username}@example.org');
-define('DIRECTORY_ADMIN_BINDING', 'admin@example.org');
-define('DIRECTORY_ADMIN_PASS','password');
-// Example for LDAP style authentication
-//define('DIRECTORY_SERVER','ldaps://example.org:636');
-//define('DIRECTORY_BASE_DN','ou=people,o=ldap.domain.somewhere');
-//define('DIRECTORY_USERNAME_ATTRIBUTE', 'uid');
-//define('DIRECTORY_USER_BINDING','uid={username},'.DIRECTORY_BASE_DN);
-//define('DIRECTORY_ADMIN_BINDING', 'uid=admin,'.DIRECTORY_BASE_DN);
-//define('DIRECTORY_ADMIN_PASS','password');
-
-/**
- * CAS authentication http://www.jasig.org/cas
- *
- * https://wiki.jasig.org/display/CASC/phpCAS
- *
- * phpCAS is a PHP library for handling the calls to the CAS service
- * It is the official library, part of the Jasig CAS project
- */
-//define('CAS','/var/www/libraries/phpCAS');
-//define('CAS_SERVER','cas.somewhere.org');
-//define('CAS_URI','cas');
-
-/**
- * YUI
- * What host do you want to use for the YUI libraries
- */
-define('YUI','http://yui.yahooapis.com/3.4.1/build');
-
-/**
- * Default coordinates for map center
- * This should probably be the center of your city
- * If you can, it's best to adjust these values in your php.ini
- */
-define('DEFAULT_LATITUDE',ini_get('date.default_latitude'));
-define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
+define('SITE_HOME', !empty($_SERVER['SITE_HOME']) ? $_SERVER['SITE_HOME'] : __DIR__.'/data');
+include SITE_HOME.'/site_config.inc';
 
 //-------------------------------------------------------------------
 // Bootstrap code
@@ -131,12 +26,29 @@ define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
 /**
  * Enable autoloading for the PHP libraries
  */
-ini_set('include_path','.'.PATH_SEPARATOR.ZEND);
-require_once 'Zend/Loader/Autoloader.php';
-Zend_Loader_Autoloader::getInstance();
+require_once APPLICATION_HOME.'/vendor/zendframework/zend-loader/src/AutoloaderFactory.php';
+$config = [
+	'Zend\Loader\StandardAutoloader' => [
+		'namespaces' => [
+			'Application' => APPLICATION_HOME,
+			'Site'        => SITE_HOME,
+            'Blossom'     => BLOSSOM.'/src',
+            'Aura\Router'          => APPLICATION_HOME.'/vendor/aura/router/src',
+            'Aura\SqlQuery'        => APPLICATION_HOME.'/vendor/aura/sqlquery/src',
+            'Zend\Stdlib'          => APPLICATION_HOME.'/vendor/zendframework/zend-stdlib/src',
+            'Zend\Permissions\Acl' => APPLICATION_HOME.'/vendor/zendframework/zend-permissions-acl/src',
+            'Zend\Paginator'       => APPLICATION_HOME.'/vendor/zendframework/zend-paginator/src',
+            'Zend\Log'             => APPLICATION_HOME.'/vendor/zendframework/zend-log/src',
+            'Zend\Loader'          => APPLICATION_HOME.'/vendor/zendframework/zend-loader/src',
+            'Zend\Hydrator'        => APPLICATION_HOME.'/vendor/zendframework/zend-hydrator/src',
+            'Zend\Db'              => APPLICATION_HOME.'/vendor/zendframework/zend-db/src',
+		]
+	]
+];
+Zend\Loader\AutoloaderFactory::factory($config);
 
-include FRAMEWORK.'/globalFunctions.php';
-spl_autoload_register('autoload');
+include APPLICATION_HOME.'/routes.inc';
+include APPLICATION_HOME.'/access_control.inc';
 
 /**
  * Session Startup
@@ -144,16 +56,19 @@ spl_autoload_register('autoload');
  * We only want sessions when PHP code is executed from the webserver
  */
 if (!defined('STDIN')) {
-	ini_set('session.save_path',APPLICATION_HOME.'/data/sessions');
+	ini_set('session.save_path', SITE_HOME.'/sessions');
+	ini_set('session.cookie_path', BASE_URI);
 	session_start();
 }
 
 /**
- * Load the Zend_Acl
+ * Skidder is a web service for error loggin.  This application supports
+ * logging errors to a Skidder server.  You must register for an application_id
+ * on the skidder server you want to post errors to.
  */
-include APPLICATION_HOME.'/access_control.inc';
-
-/**
- * Grab a timestamp for calculating process time
- */
-$startTime = microtime(1);
+//$writer = new Blossom\Classes\Log\SkidderWriter('http://localhost/skidder/index', 100 );
+//$logger = new Zend\Log\Logger();
+//$logger->addWriter($writer);
+//Zend\Log\Logger::registerErrorHandler($logger);
+//Zend\Log\Logger::registerExceptionHandler($logger);
+//Zend\Log\Logger::registerFatalErrorShutdownFunction($logger);

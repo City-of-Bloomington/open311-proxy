@@ -1,16 +1,24 @@
 #!/bin/bash
-APP_NAME=open311-proxy
-BUILD=./build
-DIST=./dist
+APPNAME=open311-proxy
+DIR=`pwd`
+BUILD=$DIR/build
 
 if [ ! -d $BUILD ]
 	then mkdir $BUILD
 fi
 
-if [ ! -d $DIST ]
-	then mkdir $DIST
-fi
+# Compile the Lanague files
+cd $DIR/language
+./build_lang.sh
+cd $DIR
 
-rsync -rlv --exclude-from=./buildignore --delete ./ ./build/
+# Compile the SASS
+cd $DIR/public/css
+./build_css.sh
+cd $DIR
 
-tar czvf $DIST/$APP_NAME.tar.gz --transform=s/build/$APP_NAME/ $BUILD
+# The PHP code does not need to actually build anything.
+# Just copy all the files into the build
+rsync -rlv --exclude-from=$DIR/buildignore --delete $DIR/ $BUILD/$APPNAME
+cd $BUILD
+tar czvf $APPNAME.tar.gz $APPNAME

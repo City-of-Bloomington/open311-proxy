@@ -1,0 +1,28 @@
+/**
+ * Basic HTML element styles
+ */
+body { font-family:sans-serif; }
+
+h1 { font-weight:bold; margin:.5em 0; color:#036; }
+h2 { font-size:131%; font-weight:bold; margin:.5em 0; color:#036; }
+h3 { font-size:110%; font-weight:bold;  margin:.5em 0 .5em 0; }
+h4 { font-size:100%; font-weight:bold; }
+a { text-decoration:none; color:#00f; cursor:pointer; }
+p { margin:0 .5em .5em .5em; }
+
+table { margin:0 .5em .5em .5em; }
+th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
+td { padding:.25em; }
+thead th { text-align:left; }
+tbody th { text-align:right; }
+
+ul { list-style-type:none; margin:0 0 1em 1em; padding:0; }
+li { }
+li fieldset { margin:.25em 0; }
+fieldset { margin:1em 0; padding:.5em; }
+legend { font-weight:bold; font-size:110%; margin-bottom:.25em; }
+label { font-weight:bold; }
+label.required { padding-right:20px; background:url('images/asterisk.png') right center no-repeat; }
+textarea { width:75%; }
+
+

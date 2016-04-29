@@ -1,24 +1,39 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Endpoint $this->endpoint
  */
+use Application\Models\Person;
+
 $fields = array('url','name','jurisdiction','api_key','latitude','longitude');
+$rows = '';
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
-	$$field = View::escape($this->endpoint->$get());
+	$$field = self::escape($this->endpoint->$get());
+
+	if ($field != 'name') {
+        $rows.= "<tr><th>{$this->_($field)}</th><td>{$$field}</td></tr>";
+	}
 }
-echo "
-<div class=\"endpointInfo\">
-	<h2>$name</h2>
+?>
+<section>
+    <header>
+        <h1><?= $name; ?></h1>
+        <div class="tools">
+        <?php
+            if (Person::isAllowed('endpoints', 'edit')) {
+                $helper = $this->template->getHelper('buttonLink');
+                echo $helper->buttonLink(
+                    self::generateUri('endpoints.update', ['id'=>$this->endpoint->getId()]),
+                    $this->_('endpoint_edit'),
+                    'edit'
+                );
+            }
+        ?>
+        </div>
+    </header>
 	<table>
-		<tr><th>url</th><td>$url</td></tr>
-		<tr><th>jurisdiction</th><td>$jurisdiction</td></tr>
-		<tr><th>api_key</th><td>$api_key</td></tr>
-		<tr><th>latitude</th><td>$latitude</td></tr>
-		<tr><th>longitude</th><td>$longitude</td></tr>
+        <?= $rows; ?>
 	</table>
-</div>
-";
+</section>

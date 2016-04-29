@@ -1,0 +1,8 @@
+<?php
+define('APPLICATION_NAME','test');
+
+define('BASE_URL','http://localhost/test');
+define('BASE_URI','/test');
+
+define('DATE_FORMAT', 'n/j/Y H:i:s');
+define('LOCALE', 'en_US');

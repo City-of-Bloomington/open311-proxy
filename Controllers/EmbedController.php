@@ -1,58 +1,50 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Client;
+use Blossom\Classes\Controller;
+
 class EmbedController extends Controller
 {
-	public function index()
-	{
-		$this->template->setFilename('embed');
-
+    public function index()
+    {
 		$client = !empty($_REQUEST['client']) ? $this->loadClient($_REQUEST['client']) : null;
 		if ($client) {
 			$endpoint = $client->getEndpoint();
-			$service = !empty($_REQUEST['service_code'])
+			$service  = !empty($_REQUEST['service_code'])
 				? $endpoint->getService($_REQUEST['service_code'])
 				: null;
+
 
 			// Handle what the user posts
 			if ($service && isset($_POST['service_code'])) {
 				try {
 					$xml = $endpoint->postServiceRequest($_POST, $client);
-					$block = new Block('embed/thankYou.inc',array('endpoint'=>$endpoint));
 					if ($xml->request->service_request_id) {
 						try {
-							$block->request = $endpoint->getServiceRequest($xml->request->service_request_id);
+							$request = $endpoint->getServiceRequest($xml->request->service_request_id);
 						}
 						catch (Exception $e) {
-							$_SESSION['errorMessages'][] = $e;
-						}
+                            $_SESSION['errorMessages'][] = $e;
+                        }
 					}
-					$this->template->blocks[] = $block;
-					return;
 				}
-				catch (Exception $e) {
-					$_SESSION['errorMessages'][] = $e;
-				}
-			}
-
-			// Display the Forms
-			if ($service) {
-				$this->template->blocks[] = new Block(
-					'embed/requestForm.inc',
-					array('client'=>$client, 'service'=>$service)
-				);
-			}
-			elseif (isset($_REQUEST['group'])) {
-				$this->template->blocks[] = new Block('embed/chooseService.inc', array('endpoint'=>$endpoint));
-			}
-			else {
-				$this->template->blocks[] = new Block('embed/chooseGroup.inc', array('endpoint'=>$endpoint));
+				catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 			}
 		}
-	}
+        $view = new \Application\Views\Embed\EmbedView([
+            'client'   => $client,
+            'service'  => $service,
+            'endpoint' => $endpoint
+        ]);
+        if (isset($xml    )) { $view->open311Response = $xml; }
+        if (isset($request)) { $view->service_request = $request; }
+        return $view;
+    }
 
 	/**
 	 * @return Client
