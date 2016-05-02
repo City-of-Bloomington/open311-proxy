@@ -159,6 +159,8 @@ $embed_uri = self::generateUri('embed.index');
 			<input name="client" type="hidden" value="<?= $this->client->getId(); ?>" />
 			<input name="service_code" type="hidden" value="<?= $service_code; ?>" />
 
+			<?= \Application\Models\Captcha::render(); ?>
+
 			<button type="submit" class="submit">Submit</button>
 		</fieldset>
 	</form>

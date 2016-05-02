@@ -8,6 +8,9 @@ define('APPLICATION_NAME','application');
 define('BASE_URL','http://localhost/application');
 define('BASE_URI','/application');
 
+define('RECAPTCHA_SITE_KEY',   '');
+define('RECAPTCHA_SERVER_KEY', '');
+
 /**
  * YUI
  * What host do you want to use for the YUI libraries
