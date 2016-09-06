@@ -11,7 +11,7 @@ use Blossom\Classes\Controller;
 
 class EmbedController extends Controller
 {
-    public function index()
+    public function index(array $params=null)
     {
 		$client = !empty($_REQUEST['client']) ? $this->loadClient($_REQUEST['client']) : null;
 		if ($client) {

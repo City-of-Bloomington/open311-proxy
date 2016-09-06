@@ -23,7 +23,7 @@ class PeopleController extends Controller
             exit();
         }
     }
-	public function index()
+	public function index(array $params=null)
 	{
 		$table = new PeopleTable();
 

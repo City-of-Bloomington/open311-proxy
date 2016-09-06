@@ -21,7 +21,7 @@ use Application\Models\Person;
             }
         ?>
         </div>
-    <header>
+    </header>
     <?php
         $userCanEdit   = Person::isAllowed('clients', 'edit');
         $userCanDelete = Person::isAllowed('clients', 'delete');

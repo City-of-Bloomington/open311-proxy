@@ -21,7 +21,7 @@ class LoginController extends Controller
 	/**
 	 * Attempts to authenticate users via CAS
 	 */
-	public function index()
+	public function index(array $params=null)
 	{
 		// If they don't have CAS configured, send them onto the application's
 		// internal authentication system

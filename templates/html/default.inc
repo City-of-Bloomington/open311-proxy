@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <?php $this->_include('partials/head.inc'); ?>
 <body class="full-width">
 	<?php $this->_include('partials/header.inc'); ?>
@@ -13,7 +13,10 @@
         ?>
         </div>
 	</main>
-	<?php $this-> _include('partials/footer.inc'); ?>
+	<?php
+        $this->_include('partials/footer.inc');
+		$this->_include('partials/assets.inc');
+    ?>
 </body>
 </html>
 <?php $this->_include('partials/garbageCollection.inc'); ?>

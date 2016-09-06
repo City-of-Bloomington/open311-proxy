@@ -1,0 +1,73 @@
+/**
+ * City of Bloomington Theme
+ *
+ * This stylesheet extends the default Factory Number One CSS.
+ * @see https://github.com/City-of-Bloomington/factory-number-one
+ *
+ * To use this stylesheet, make sure to include a link to the factory-number-one
+ * stylesheet in the template head.
+ *
+ * This CSS should only include properties that are not include in fn1.
+ */
+@import 'modules/vars.scss';
+@import 'modules/header.scss';
+@import 'modules/table.scss';
+
+#errorMessages { background-color:#fcc; padding:4px; border-radius:10px; }
+
+.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; margin-left:0; line-height:20px; }
+.breadcrumbs li { list-style:none; float:left; height:20px; padding-left:4px; }
+.breadcrumbs a {
+    display:block;
+    background:url('images/breadcrumb.png') no-repeat right center;
+    padding:0 15px 0 0;
+}
+
+footer {
+    background-color: $color-background-footer; color: $color-heading-1;
+    margin-top: ($size-gutter*2);
+    padding: $size-gutter;
+    font-size: $font-size-small;
+}
+
+button.chooseLocation { background-image:url('images/fa-svg/crosshairs.svg'); padding-left:1.7em; }
+
+#groupChooser { border-top: .25rem solid #315da6; }
+
+.serviceChooser {
+    border-top: 1px solid #bcc9d8;
+    font-family: Lato;
+
+    h1 {
+        font-weight:normal; font-size: 1.375rem; /* 16px -> 22px */
+
+        > a  { 	color: #585f68; display: block; padding: .5em 0; }
+        > a:before {
+            background: url('images/open311-arrow.svg') 0 0 / 100% 100% no-repeat;
+            content: ' ';
+            display: block;
+            float: left;
+            height: 20px;
+            margin: 2px 20px 0 20px;
+            transform: rotate(90deg);
+            transition: transform .15s ease-out;
+            width: 18px;
+        }
+    }
+
+    ul {
+        overflow: hidden;
+        margin: 0 0 30px 60px;
+        position: relative;
+        transition: opacity .3s ease-in-out, transform .15s ease-in-out;
+    }
+    li {
+        border-top: 1px solid #bcc9d8; padding: .25em 0;
+        a { color: #315da6; display: inline-block; padding: .3333em .75em; }
+    }
+
+    &.collapsed {
+        ul { height: 0; margin: 0; opacity: 0; transform: translateX(240px); }
+        h1 > a:before { transform:rotate(0); }
+    }
+}

@@ -10,8 +10,10 @@ use Blossom\Classes\Url;
 $url = new Url(Url::current_url());
 $url->group = $_GET['group'];
 ?>
-<div class="serviceChooser">
-	<h3><a href="<?= $url; ?>"><?= self::escape($_GET['group']); ?></a></h3>
+<article class="serviceChooser">
+    <header>
+        <h1><a href="<?= $url; ?>"><?= self::escape($_GET['group']); ?></a></h1>
+    </header>
 	<ul>
 	<?php
 		$services = !empty($_GET['group'])
@@ -29,4 +31,4 @@ $url->group = $_GET['group'];
 		}
 	?>
 	</ul>
-</div>
+</article>

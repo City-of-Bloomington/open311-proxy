@@ -8,9 +8,9 @@
      font-size:14px; font-weight:bold; color:black;
      cursor:pointer;
  }
- .add { background:url('images/plus_button.png') left center no-repeat; }
- .edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
- .search { background:url('images/buttonBackground.png') left center no-repeat; padding-left:10px; }
- .submit, .login { background:url('images/check_button.png') left center no-repeat; }
- .delete { background:url('images/x_button.png') left center no-repeat; }
- .chooseLocation { background:url('images/reticule_button.png') left center no-repeat; }
+ .add            { background:url('images/plus_button.png')      left center no-repeat; padding-left:22px; }
+ .edit, .change  { background:url('images/pencil_button.png')    left center no-repeat; padding-left:22px; }
+ .search         { background:url('images/buttonBackground.png') left center no-repeat; padding-left:22px; }
+ .submit, .login { background:url('images/check_button.png')     left center no-repeat; padding-left:22px; }
+ .delete         { background:url('images/x_button.png')         left center no-repeat; padding-left:22px; }
+ .chooseLocation { background:url('images/reticule_button.png')  left center no-repeat; padding-left:22px; }

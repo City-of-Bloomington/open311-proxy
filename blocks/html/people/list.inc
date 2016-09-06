@@ -30,14 +30,14 @@ use Blossom\Classes\Url;
 		<thead>
 			<tr><th><?= $this->_('username'); ?></th>
 				<th><?= $this->_('name'); ?></th>
-				<th><?= $this->_(['email','emails',1]); ?></th>
+				<th><?= $this->_('email'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
 			foreach ($this->people as $person) {
 				$name = self::escape($person->getFullname());
-				$url = self::generateUri('people.view', ['id'=>$person->getId()]);
+				$url  = self::generateUri('people.view', ['id'=>$person->getId()]);
 				echo "
 				<tr><td><a href=\"$url\">{$person->getUsername()}</a></td>
 					<td><a href=\"$url\">$name</a></td>

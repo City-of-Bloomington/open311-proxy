@@ -1,12 +1,9 @@
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/css/reset.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/css/screen.css" />
-	<?php
-        if (defined('THEME')) {
-            $css = BASE_URI.'/'.THEME.'/css/screen.css';
-            echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css\" />";
-        }
-	?>
-	<title><?php echo isset($this->title) ? self::escape($this->title) : APPLICATION_NAME; ?></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+        $this->_include('partials/stylesheets.inc');
+        $this->addToAsset('scripts', BASE_URI.'/js/menus.js');
+    ?>
+    <title><?= APPLICATION_NAME; ?>: <?= self::escape($this->title); ?></title>
 </head>

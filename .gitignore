@@ -1,4 +1,3 @@
-configuration.inc
 site_config.inc
 data/sessions/*
 build
@@ -13,4 +12,3 @@ gulpfile.js
 .ftppass
 .gulp-build
 vendor
-composer.lock

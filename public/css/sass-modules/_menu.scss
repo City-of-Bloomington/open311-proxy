@@ -2,20 +2,26 @@
  * @copyright 2015-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-.menuLauncher {
-    cursor: pointer; display: inline-table;
-}
-.menuLinks {
-    position:absolute;
-    display:inline-table;
-    opacity: 0;
-    white-space:nowrap;
-    z-index:7;
-    background: #fff;
-    border: 1px solid #000;
+.dropdown {
+    .launcher {
+        cursor: pointer; display: inline-table;
 
-    &.open   { opacity: 1; }
-    &.closed { top: -10000px; left: -10000px; }
+        &[aria-expanded="true"] + .links {
+            display:block;
+        }
+        &[aria-expanded="false"] + .links {
+            display:none;
+        }
+    }
+    .links {
+        background-color:#fff;
+        position:absolute;
+        white-space:nowrap;
+        transition: opacity .2s;
+        z-index:7;
 
-    a { display: block; }
+        a { display: block; }
+    }
+    .subgroup {
+    }
 }

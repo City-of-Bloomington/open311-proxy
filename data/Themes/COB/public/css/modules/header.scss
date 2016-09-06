@@ -1,0 +1,48 @@
+body > header {
+    background-color: $color-content-background;
+    border-top: $size-gutter solid $color-header;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding:0;
+
+    button { background-color:transparent; }
+    a { color:$color-header; }
+
+    > .container {
+        h1, h2 { display:inline-block; height:2.5rem; margin:0; vertical-align:middle; }
+        h1 a, h2 a {
+            display:inline-block;
+            height:2.5rem; line-height:2.5rem;
+            vertical-align:middle;
+        }
+        h1 a {
+            background:url('images/logo.svg') no-repeat left center;
+            font-size:1rem; font-weight:normal; margin:0;
+            padding-left:3rem;
+            background-size:2.5rem 2.5rem;
+        }
+        h2 {
+            font-size:$font-size-small;
+            margin: 0 0 0 2em;
+            padding:$size-gutter 2em;
+            border-left:1px solid $color-border-table;
+        }
+    }
+
+    @media screen and (min-width: $size-viewport-med) {
+        position: relative;
+        > .container { }
+    }
+    @media screen and (min-width: $size-viewport-large) {
+        > .container { }
+    }
+    @media screen and (max-height: $size-viewport-notTall) {
+        border-top: 0;
+    }
+
+    #nav1 {
+        background-color: $color-header;
+
+        a { background:none; color:$color-content-background; }
+    }
+}

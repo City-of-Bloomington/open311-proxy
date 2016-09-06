@@ -5,3 +5,13 @@
 @import 'sass-modules/_field';
 @import 'sass-modules/_buttons';
 @import 'sass-modules/_tables';
+
+#location_map {
+    width:100%; height:300px;
+    border:2px solid black;
+}
+
+/* YUI styles */
+.yui3-overlay { width:90%; }
+.yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
+.yui3-widget-ft { clear:both; }

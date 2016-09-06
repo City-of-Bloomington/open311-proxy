@@ -21,7 +21,7 @@ $title = $id ? $this->_('endpoint_edit') : $this->_('endpoint_add');
             <?php
                 $field = $this->template->getHelper('field');
                 foreach (['name', 'url', 'jurisdiction', 'api_key'] as $f) {
-                    echo $field->input(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f, 'required'=>true]);
+                    echo $field->field(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f, 'required'=>true]);
                 }
             ?>
         </fieldset>
@@ -30,7 +30,7 @@ $title = $id ? $this->_('endpoint_edit') : $this->_('endpoint_add');
             <p><?= $this->_('endpointCoordinatesHelp', 'messages'); ?></p>
             <?php
                 foreach (['latitude', 'longitude'] as $f) {
-                    echo $field->input(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f]);
+                    echo $field->field(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f]);
                 }
 
                 $h = $this->template->getHelper('saveAndCancelButtons');

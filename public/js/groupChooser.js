@@ -10,12 +10,12 @@ YUI().use('node', function(Y) {
 
 	function toggle(e) {
 		e.preventDefault();
-		this.get('parentNode').toggleClass('collapsed');
+		this.get('parentNode').get('parentNode').toggleClass('collapsed');
 		if (HOST.source) {
 			HOST.source.postMessage(document.body.scrollHeight, HOST.origin);
 		}
 	}
 
 	closeAll();
-	Y.delegate('click', toggle, '#groupChooser', '.serviceChooser h3');
+	Y.delegate('click', toggle, '#groupChooser', '.serviceChooser h1');
 });

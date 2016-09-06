@@ -12,7 +12,7 @@ use Blossom\Classes\Block;
 
 class UsersController extends Controller
 {
-	public function index()
+	public function index(array $params=null)
 	{
 		$people = new PeopleTable();
 		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;

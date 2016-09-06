@@ -12,7 +12,7 @@ use Blossom\Classes\Block;
 
 class EndpointsController extends Controller
 {
-    public function index()
+    public function index(array $params=null)
     {
         $table = new EndpointTable();
         $list  = $table->find();

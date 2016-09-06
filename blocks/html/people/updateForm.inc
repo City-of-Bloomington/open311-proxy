@@ -9,7 +9,7 @@ foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = self::escape($this->person->$get());
 }
-$title = $this->person->getId() ? self::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
+$title = $this->person->getId() ? $this->_('person_edit') : $this->_('person_add');
 ?>
 <section>
     <header>
@@ -21,9 +21,9 @@ $title = $this->person->getId() ? self::escape('Edit '.$this->person->getFirstna
 			<input name="id" type="hidden" value="<?= $this->person->getId(); ?>" />
             <?php
                 $field = $this->template->getHelper('field');
-                echo $field->input(['name'=>'firstname', 'id'=>'firstname', 'label'=>$this->_('firstname'), 'value'=>$firstname, 'required'=>true]);
-                echo $field->input(['name'=>'lastname',  'id'=>'lastname',  'label'=>$this->_('lastname'),  'value'=>$lastname,  'required'=>true]);
-                echo $field->input(['name'=>'email',     'id'=>'email',     'label'=>$this->_('email'),     'value'=>$email]);
+                echo $field->field(['name'=>'firstname', 'id'=>'firstname', 'label'=>$this->_('firstname'), 'value'=>$firstname, 'required'=>true]);
+                echo $field->field(['name'=>'lastname',  'id'=>'lastname',  'label'=>$this->_('lastname'),  'value'=>$lastname,  'required'=>true]);
+                echo $field->field(['name'=>'email',     'id'=>'email',     'label'=>$this->_('email'),     'value'=>$email]);
 
 				$h = $this->template->getHelper('saveAndCancelButtons');
 				echo $h->saveAndCancelButtons(BASE_URI.'/people');
