@@ -36,14 +36,18 @@ class EmbedController extends Controller
 				}
 				catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 			}
+
+            $view = new \Application\Views\Embed\EmbedView([
+                'client'   => $client,
+                'service'  => $service,
+                'endpoint' => $endpoint
+            ]);
+            if (isset($response)) { $view->open311Response = $response; }
+            if (isset($request )) { $view->service_request = $request;  }
 		}
-        $view = new \Application\Views\Embed\EmbedView([
-            'client'   => $client,
-            'service'  => $service,
-            'endpoint' => $endpoint
-        ]);
-        if (isset($response)) { $view->open311Response = $response; }
-        if (isset($request )) { $view->service_request = $request;  }
+		else {
+            $view = new \Application\Views\NotFoundView();
+		}
         return $view;
     }
 
