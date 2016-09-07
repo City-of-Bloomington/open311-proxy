@@ -11,6 +11,8 @@ use Blossom\Classes\Url;
 
 class Endpoint extends ActiveRecord
 {
+    const FEATURED = 'featured';
+
 	public static $optionalOpen311Fields = [
 		'address_string','lat','long',
 		'first_name','last_name','phone','email',
@@ -91,15 +93,22 @@ class Endpoint extends ActiveRecord
 	 */
 	public function getServiceGroups()
 	{
-		$groups = [];
-		$services = $this->getServiceList();
+		$groups      = [];
+		$services    = $this->getServiceList();
+		$featured    = self::FEATURED;
+		$hasFeatured = false;
+
 		if ($services) {
-			foreach ($services as $service) {
-				$group = "{$service->group}";
-				if (!in_array($group, $groups)) {
-					$groups[] = $group;
-				}
+			foreach ($services as $s) {
+				if (!in_array($s->group, $groups)) {
+                    $groups[] = $s->group;
+                }
+
+				if (!empty($s->$featured) && !in_array($featured, $groups)) {
+                    $hasFeatured = true;
+                }
 			}
+			if ($hasFeatured) { array_unshift($groups, $featured); }
 		}
 		return $groups;
 	}
@@ -129,11 +138,13 @@ class Endpoint extends ActiveRecord
 	 */
 	public function getGroupServices($group)
 	{
-		$out = [];
-		foreach ($this->getServiceList() as $service) {
-			if ((string)$service->group == $group) {
-				$out[] = $service;
-			}
+		$out      = [];
+		$featured = self::FEATURED;
+
+		foreach ($this->getServiceList() as $s) {
+            if ($group === $s->group)     { $out[] = $s; }
+            if ($group === $featured
+                && !empty($s->$featured)) { $out[] = $s; }
 		}
 		return $out;
 	}

@@ -158,3 +158,6 @@ msgstr "Edit Client"
 
 msgid "client_info"
 msgstr "Client Info"
+
+msgid "featured"
+msgstr "Most Popular"
