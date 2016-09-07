@@ -79,6 +79,9 @@ msgid_plural "emails"
 msgstr[0] "Email"
 msgstr[1] "Email Addresses"
 
+msgid "phone"
+msgstr "Phone"
+
 msgid "person"
 msgid_plural "people"
 msgstr[0] "Person"

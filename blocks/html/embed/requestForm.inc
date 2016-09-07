@@ -2,14 +2,14 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Client $this->client
- * @param SimpleXMLElement $this->service
+ * @param Client   $this->client
+ * @param stdClass $this->service
  */
 use Application\Models\Endpoint;
 
-$endpoint = $this->client->getEndpoint();
-$service_code = "{$this->service->service_code}";
-$service_name = self::escape($this->service->service_name);
+$endpoint            = $this->client->getEndpoint();
+$service_code        = $this->service->service_code;
+$service_name        = self::escape($this->service->service_name);
 $service_description = self::escape($this->service->description);
 
 foreach (Endpoint::$optionalOpen311Fields as $field) {
@@ -39,25 +39,24 @@ $embed_uri = self::generateUri('embed.index');
 			</div>
 			<div id="map_overlay"></div>
 			<input name="address_string" id="address_string" type="hidden" value="<?= $address_string; ?>" />
-			<input name="lat" id="lat" type="hidden" value="<?= $lat; ?>" />
-			<input name="long" id="long" type="hidden" value="<?= $long; ?>" />
+			<input name="lat"            id="lat"            type="hidden" value="<?= $lat; ?>" />
+			<input name="long"           id="long"           type="hidden" value="<?= $long; ?>" />
 		</fieldset>
 
 		<fieldset><legend>Contact Info</legend>
-			<table>
-				<tr><td><label for="first_name">First Name</label></td>
-					<td><input name="first_name" id="first_name" value="<?= $first_name; ?>" type="text" /></td>
-				</tr>
-				<tr><td><label for="last_name">Last Name</label></td>
-					<td><input name="last_name" id="last_name" value="<?= $last_name; ?>" type="text" /></td>
-				</tr>
-				<tr><td><label for="phone">Phone</label></td>
-					<td><input name="phone" id="phone" value="<?= $phone; ?>" type="text" /></td>
-				</tr>
-				<tr><td><label for="email">Email</label></td>
-					<td><input name="email" id="email" value="<?= $email; ?>" type="text" /></td>
-				</tr>
-			</table>
+		<?php
+            $helper = $this->template->getHelper('field');
+            $fields = [
+                'first_name' => $this->_('firstname'),
+                'last_name'  => $this->_('lastname' ),
+                'phone'      => $this->_('phone'    ),
+                'email'      => $this->_('email'    )
+            ];
+            foreach ($fields as $f=>$label) {
+                echo $helper->field(['name'=>$f, 'id'=>$f, 'label'=>$label]);
+            }
+
+		?>
 		</fieldset>
 
 		<fieldset><legend>Report Details</legend>
@@ -67,10 +66,10 @@ $embed_uri = self::generateUri('embed.index');
 			<?php
 				$service = $endpoint->getServiceDefinition($service_code);
 				if ($service && $service->attributes) {
-					foreach ($service->attributes->attribute as $attribute) {
-						$code = self::escape($attribute->code);
+					foreach (   $service->attributes as $attribute) {
+						$code        = self::escape($attribute->code);
 						$description = self::escape($attribute->description);
-						$datatype = "{$attribute->datatype}";
+						$datatype    = "{$attribute->datatype}";
 
 						$inputHTML = '';
 						switch ($datatype) {
@@ -79,9 +78,9 @@ $embed_uri = self::generateUri('embed.index');
 								<li><label for=\"$code\">$description</label>
 									<div><select name=\"attribute[$code]\" id=\"$code\"><option></option>
 								";
-										foreach ($attribute->values->value as $value) {
+										foreach ($attribute->values as $value) {
 											$selected = (!empty($_POST['attribute'][$code])
-														&& $_POST['attribute'][$code] == $value->key)
+														     && $_POST['attribute'][$code] == $value->key)
 												? 'selected="selected"'
 												: '';
 											$k = self::escape($value->key);
@@ -100,8 +99,8 @@ $embed_uri = self::generateUri('embed.index');
 								<li><fieldset><legend>$description</legend>
 									<ul>
 								";
-									foreach ($attribute->values->value as $value) {
-										$checked = (isset($_POST['attribute'][$code])
+									foreach ($attribute->values as $value) {
+										$checked = (      isset($_POST['attribute'][$code])
 													&& is_array($_POST['attribute'][$code])
 													&& in_array($value->key, $_POST['attribute'][$code]))
 											? 'checked="checked"'
@@ -124,7 +123,7 @@ $embed_uri = self::generateUri('embed.index');
 								break;
 
 							case 'text':
-								$n = !empty($_POST['attribute'][$code])
+								$n =        !empty($_POST['attribute'][$code])
 									? self::escape($_POST['attribute'][$code])
 									: '';
 								echo "
@@ -135,7 +134,7 @@ $embed_uri = self::generateUri('embed.index');
 								break;
 
 							default:
-								$n = !empty($_POST['attribute'][$code])
+								$n =        !empty($_POST['attribute'][$code])
 									? self::escape($_POST['attribute'][$code])
 									: '';
 								echo "
@@ -156,12 +155,12 @@ $embed_uri = self::generateUri('embed.index');
 		</fieldset>
 
 		<fieldset>
-			<input name="client" type="hidden" value="<?= $this->client->getId(); ?>" />
+			<input name="client"       type="hidden" value="<?= $this->client->getId(); ?>" />
 			<input name="service_code" type="hidden" value="<?= $service_code; ?>" />
 
 			<?= \Application\Models\Captcha::render(); ?>
 
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit" class="submit"><?= $this->_('submit'); ?></button>
 		</fieldset>
 	</form>
 </section>

@@ -45,7 +45,7 @@ class Endpoint extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getUrl() || !$this->getName() || !$this->getJurisdiction()) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 	}
 
@@ -94,7 +94,7 @@ class Endpoint extends ActiveRecord
 		$groups = [];
 		$services = $this->getServiceList();
 		if ($services) {
-			foreach ($services->service as $service) {
+			foreach ($services as $service) {
 				$group = "{$service->group}";
 				if (!in_array($group, $groups)) {
 					$groups[] = $group;
@@ -104,27 +104,28 @@ class Endpoint extends ActiveRecord
 		return $groups;
 	}
 
-	private $services; // SimpleXML object from GET Service List response
 	/**
-	 * @return SimpleXMLElement
+	 * @return stdClass JSON data for the service list
 	 */
 	public function getServiceList()
 	{
-		if (!$this->services) {
-			$url = "{$this->getUrl()}/services.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
-			$services = $this->queryServer($url);
-			if ($services) {
-				$this->services = $services;
+        static $services = null;
+
+		if (!$services) {
+			$url  = "{$this->getUrl()}/services.json?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
+			$json = $this->queryServer($url);
+			if ($json) {
+				$services = $json;
 			}
 		}
-		return $this->services;
+		return $services;
 	}
 
 	/**
 	 * Returns only the services matching the given group
 	 *
 	 * @param string $group
-	 * @return array An array of SimpleXMLElements
+	 * @return array An array of Service objects
 	 */
 	public function getGroupServices($group)
 	{
@@ -152,31 +153,31 @@ class Endpoint extends ActiveRecord
 		}
 	}
 
-	private $serviceDefinitions = []; // Array of SimpleXMLElements with service_code as the key
 	/**
 	 * Returns the result from GET Service Definition for a single service
 	 *
 	 * @param string $service_code
-	 * @return SimpleXMLElement
+	 * @return stdClass
 	 */
 	public function getServiceDefinition($service_code)
 	{
-		if (!array_key_exists($service_code, $this->serviceDefinitions)) {
-			$url = "{$this->getUrl()}/services/$service_code.xml?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
-			$definition = $this->queryServer($url);
-			if ($definition) {
-				$this->serviceDefinitions[$service_code] = $definition;
-			}
+        static $defs = [];
+
+		if (!array_key_exists($service_code, $defs)) {
+			$url = "{$this->getUrl()}/services/$service_code.json?jurisdiction_id={$this->getJurisdiction()}&api_key={$this->getApi_key()}";
+			$d = $this->queryServer($url);
+			if ($d) { $defs[$service_code] = $d; }
 		}
-		return isset($this->serviceDefinitions[$service_code])
-			? $this->serviceDefinitions[$service_code]
-			: null;
+
+		return isset($defs[$service_code])
+                   ? $defs[$service_code]
+                   : null;
 	}
 
 	/**
-	 * @param array $post
-	 * @param Client $client
-	 * @return SimpleXMLElement
+	 * @param  array    $post
+	 * @param  Client   $client
+	 * @return stdClass
 	 */
 	public function postServiceRequest(array $post, Client $client=null)
 	{
@@ -201,9 +202,9 @@ class Endpoint extends ActiveRecord
 			}
 		}
 		if (!empty($_FILES['media']['name'])) {
-			$request['media'] = "@{$_FILES['media']['tmp_name']};type={$_FILES['media']['type']};filename={$_FILES['media']['name']}";
+            $request['media'] = new \CURLFile($_FILES['media']['tmp_name'], $_FILES['media']['type'], $_FILES['media']['name']);
 		}
-		$open311 = curl_init("{$this->getUrl()}/requests.xml");
+		$open311 = curl_init("{$this->getUrl()}/requests.json");
 		curl_setopt_array($open311, [
 			CURLOPT_POST           => true,
 			CURLOPT_HEADER         => false,
@@ -213,16 +214,16 @@ class Endpoint extends ActiveRecord
 		]);
 		$response = curl_exec($open311);
 		if (!$response) {
-			throw new Exception(curl_error($open311));
+			throw new \Exception(curl_error($open311));
 		}
-		$xml = simplexml_load_string($response);
-		if (!$xml) {
+		$json = json_decode($response);
+		if (!$json) {
 			echo "------Error from Open311 server----------\n";
 			echo $response;
 			exit();
 		}
 		else {
-			return $xml;
+			return $json;
 		}
 	}
 
@@ -256,32 +257,32 @@ class Endpoint extends ActiveRecord
 	}
 
 	/**
-	 * @param SimpleXMLElement|string
+	 * @param string $service_request_id
 	 */
 	public function getServiceRequest($service_request_id)
 	{
 		$service_request_id = (string)$service_request_id;
-		return $this->queryServer("{$this->getUrl()}/requests/$service_request_id.xml");
+		return $this->queryServer("{$this->getUrl()}/requests/$service_request_id.json");
 	}
 
 	/**
-	 * @param string $url
-	 * @return SimpleXMLElement
+	 * @param  string   $url
+	 * @return stdClass The JSON data as an object
 	 */
 	private function queryServer($url)
 	{
 		$file = Url::get($url);
 		if ($file) {
-			$xml = simplexml_load_string($file);
-			if ($xml) {
-				return $xml;
+            $json = json_decode($file);
+			if ($json) {
+				return $json;
 			}
 			else {
-				throw new Exception('endpoints/invalidXML');
+				throw new \Exception('endpoints/invalidJSON');
 			}
 		}
 		else {
-			throw new Exception('endpoints/open311ServerUnReachable');
+			throw new \Exception('endpoints/open311ServerUnReachable');
 		}
 	}
 }

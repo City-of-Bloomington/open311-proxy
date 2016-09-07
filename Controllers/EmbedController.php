@@ -20,14 +20,14 @@ class EmbedController extends Controller
 				? $endpoint->getService($_REQUEST['service_code'])
 				: null;
 
-
 			// Handle what the user posts
 			if ($service && isset($_POST['service_code']) && Captcha::verify()) {
 				try {
-					$xml = $endpoint->postServiceRequest($_POST, $client);
-					if ($xml->request->service_request_id) {
+					$json     = $endpoint->postServiceRequest($_POST, $client);
+					$response = $json[0];
+					if (!empty($response->service_request_id)) {
 						try {
-							$request = $endpoint->getServiceRequest($xml->request->service_request_id);
+							$request = $endpoint->getServiceRequest($response->service_request_id);
 						}
 						catch (Exception $e) {
                             $_SESSION['errorMessages'][] = $e;
@@ -42,8 +42,8 @@ class EmbedController extends Controller
             'service'  => $service,
             'endpoint' => $endpoint
         ]);
-        if (isset($xml    )) { $view->open311Response = $xml; }
-        if (isset($request)) { $view->service_request = $request; }
+        if (isset($response)) { $view->open311Response = $response; }
+        if (isset($request )) { $view->service_request = $request;  }
         return $view;
     }
 
