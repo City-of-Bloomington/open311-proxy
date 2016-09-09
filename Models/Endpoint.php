@@ -12,6 +12,7 @@ use Blossom\Classes\Url;
 class Endpoint extends ActiveRecord
 {
     const FEATURED = 'featured';
+    const EXTERNAL = 'external_link';
 
 	public static $optionalOpen311Fields = [
 		'address_string','lat','long',
