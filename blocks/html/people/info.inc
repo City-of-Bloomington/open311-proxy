@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2009-2016 City of Bloomington, Indiana
+ * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Person $this->person
  */
 use Application\Models\Person;
 use Blossom\Classes\Url;
 
-$return_url = Url::current_url();
+$return_url = Url::current_url(APPLICATION_HOST);
 $h = $this->template->getHelper('buttonLink');
 
 $username = $this->person->getUsername();
@@ -34,7 +34,7 @@ echo "
         <h1>$name</h1>
         <div class=\"tools\">$editButton</div>
     </header>
-    
+
 	<table>
 		<tr><th>{$this->_('email')}</th>
 			<td>{$this->person->getEmail()}</td>

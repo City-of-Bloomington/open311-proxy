@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Endpoint $this->endpoint
  * @param GET group
@@ -8,7 +8,7 @@
 use Application\Models\Endpoint;
 use Blossom\Classes\Url;
 
-$url = new Url(Url::current_url());
+$url = new Url(Url::current_url(APPLICATION_HOST));
 $url->group = $_GET['group'];
 
 $title = $_GET['group'] === Endpoint::FEATURED
@@ -26,7 +26,7 @@ $title = $_GET['group'] === Endpoint::FEATURED
 			: $this->endpoint->getServiceList();
 
 		if ($services) {
-            $url = new Url(Url::current_url());
+            $url = new Url(Url::current_url(APPLICATION_HOST));
 
 			foreach ($services as $s) {
 				$url->service_code = $s->service_code;
