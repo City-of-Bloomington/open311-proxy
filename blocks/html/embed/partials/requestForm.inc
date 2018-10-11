@@ -162,6 +162,6 @@ $embed_uri = self::generateUri('embed.index');
 </script>
 <?php
 	$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts', 'https://maps.googleapis.com/maps/api/js?sensor=true');
+	$this->template->addToAsset('scripts', GOOGLE_MAPS);
 	$this->template->addToAsset('scripts', BASE_URL.'/js/map_picker.js');
 ?>

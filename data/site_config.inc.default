@@ -9,6 +9,7 @@ define('APPLICATION_HOST', $_SERVER['SERVER_NAME']);
 define('BASE_URL','http://localhost/application');
 define('BASE_URI','/application');
 
+define('GOOGLE_MAPS',   'http://maps.googleapis.com/maps/api/js?key=');
 define('RECAPTCHA_SITE_KEY',   '');
 define('RECAPTCHA_SERVER_KEY', '');
 
